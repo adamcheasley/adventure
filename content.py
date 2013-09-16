@@ -1,4 +1,4 @@
-class player(object):
+class Player(object):
 
     def take(self):
         pass
@@ -13,13 +13,13 @@ class player(object):
         pass
 
 
-class item(object):
+class Item(object):
 
     def description(self):
         pass
 
 
-class room(object):
+class Room(object):
 
     def long_description(self):
         pass
