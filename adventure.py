@@ -3,15 +3,16 @@
 import sys
 from tools import World
 from tools import Utils
+from world import world as world_info
+from content import Player
 
 
 print "Welcome player.\n"
 
-# load the map
-world_info = open('world.py', 'r')
 # initialise the map
 world = World(world_info)
 utils = Utils()
+player = Player((0, 0, 0))
 
 while True:
     user_input = raw_input('>:')
@@ -19,4 +20,4 @@ while True:
         print 'Goodbye\n'
         sys.exit(1)
     else:
-        utils.parse_user_input(user_input)
+        utils.parse_user_input(user_input, player)
