@@ -8,6 +8,10 @@ class Utils(object):
         Welcome to adventure, written by Adam Forsythe-Cheasley.
         """)
 
+    def parse_user_input(self, user_input):
+        if user_input == 'help':
+            print self.adventure_help()
+
 
 class World(object):
 
