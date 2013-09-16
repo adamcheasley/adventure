@@ -1,7 +1,7 @@
 class Player(object):
 
     def __init__(self, location):
-        self.location = location
+        self.current_location = location
 
     def take(self):
         pass
@@ -35,11 +35,10 @@ class Item(object):
 
 class Room(object):
 
-    def __init__(self, title, description, location):
+    def __init__(self, title, description):
         self.title = title
         self.long_description = description[0]
         self.short_description = description[1]
-        self.location = location
 
     def items(self):
         pass
