@@ -18,6 +18,17 @@ class Item(object):
     def description(self):
         pass
 
+    def further_description(self):
+        """
+        used when a users 'looks' at this item
+        """
+
+    def use_location(self):
+        """
+        the location where this object should be used
+        """
+        pass
+
 
 class Room(object):
 
