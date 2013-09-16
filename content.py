@@ -1,5 +1,8 @@
 class Player(object):
 
+    def __init__(self, location):
+        self.location = location
+
     def take(self):
         pass
 
@@ -9,11 +12,11 @@ class Player(object):
     def inventory(self):
         pass
 
-    def location(self):
-        pass
-
 
 class Item(object):
+
+    def __init__(self, title):
+        self.title = title
 
     def description(self):
         pass
@@ -31,6 +34,9 @@ class Item(object):
 
 
 class Room(object):
+
+    def __init__(self, title):
+        self.title = title
 
     def long_description(self):
         pass
