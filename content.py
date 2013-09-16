@@ -35,17 +35,11 @@ class Item(object):
 
 class Room(object):
 
-    def __init__(self, title):
+    def __init__(self, title, description, location):
         self.title = title
-
-    def long_description(self):
-        pass
-
-    def short_description(self):
-        pass
-
-    def location(self):
-        pass
+        self.long_description = description[0]
+        self.short_description = description[1]
+        self.location = location
 
     def items(self):
         pass
