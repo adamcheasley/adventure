@@ -20,7 +20,9 @@ class Player(object):
 
     def inventory(self):
         if getattr(self, 'items', None) is not None:
-            print self.items
+            print 'You are carrying:\n'
+            for item in self.items:
+                print item
         else:
             print 'You are not carrying anything.\n'
 
