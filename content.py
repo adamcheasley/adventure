@@ -3,16 +3,26 @@ class Player(object):
     def __init__(self, location):
         self.current_location = location
 
-    def take(self, item):
+    def take(self, item, room):
+        # check item is in room
+        if not room.items:
+            raise TypeError
+        if item != room.items[0].title:
+            raise TypeError
+
         if getattr(self, 'items', None) is None:
             self.items = []
         self.items.append(item)
+        print 'Taken\n'
 
     def drop(self):
         pass
 
     def inventory(self):
-        pass
+        if getattr(self, 'items', None) is not None:
+            print self.items
+        else:
+            print 'You are not carrying anything.\n'
 
 
 class Item(object):
@@ -41,6 +51,3 @@ class Room(object):
         self.title = title
         self.long_description = description[0]
         self.short_description = description[1]
-
-    def items(self):
-        return self.items
