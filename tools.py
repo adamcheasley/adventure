@@ -1,5 +1,6 @@
 from textwrap import dedent
 from content import Room
+from content import Item
 
 
 DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
@@ -64,17 +65,25 @@ class World(object):
         self.world = {}
         for ob in adventure_map:
             room = ob['room']
+            items = ob['items']
             location_id = self.create_location_id(room['location'])
-            self.world[location_id] = Room(room['title'],
-                                           room['description'],
-                                           )
+            room_ob = Room(room['title'], room['description'])
+            room_ob.items = []
+            for item in items:
+                room_ob.items.append(Item(item['title']))
+            self.world[location_id] = room_ob
 
-    def location(self, current_location):
+    def describe_location(self, current_location):
         """
-        returns the current room
+        returns the current room and any items
         """
         location = self.world.get(self.create_location_id(current_location))
         if location is not None:
-            return location.long_description
+            main_description = location.long_description
+            if location.items:
+                return '%s\nThere is a %s here.' % (main_description,
+                                                    location.items[0].title)
+            else:
+                return main_description
         else:
             return 'You are lost.\n'
