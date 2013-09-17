@@ -2,7 +2,7 @@
 
 world = [
     {'room': {'title': 'lobby',
-              'description': ('You are in the lobby. To the east is a door.', 'bar'),
+              'description': ('You are in the lobby. There is a large digital clock on the wall which reads "09:32". To the east is a door.', 'bar'),
               'location': [0, 0, 0]},
      'items': [],
      },
