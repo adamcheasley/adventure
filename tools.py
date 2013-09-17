@@ -88,7 +88,8 @@ class World(object):
         """
         location = self.current_room(current_location)
         if location is not None:
-            main_description = location.long_description
+            main_description = '%s\n%s' % (location.title,
+                                           location.long_description)
             if location.items:
                 return '%s\nThere is a %s here.' % (main_description,
                                                     location.items[0].title)
