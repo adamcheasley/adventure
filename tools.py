@@ -2,6 +2,10 @@ from textwrap import dedent
 from content import Room
 
 
+DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
+              'down']
+
+
 class Utils(object):
 
     def adventure_help(self):
@@ -9,8 +13,9 @@ class Utils(object):
         Welcome to adventure, written by Adam Forsythe-Cheasley.
         """)
 
-    def parse_user_input(self, user_input, player):
+    def parse_user_input(self, user_input, player, world):
         room_described = True
+        new_location = list(player.current_location)
         # remove the verb 'go' as we only care about the direction
         if user_input.startswith('go'):
             user_input = user_input[3:]
@@ -20,13 +25,22 @@ class Utils(object):
         elif user_input == 'look':
             return False
         elif user_input in ['east', 'e']:
-            player.current_location[0] += 1
+            new_location[0] += 1
             room_described = False
         elif user_input in ['west', 'w']:
-            player.current_location[0] -= 1
+            new_location[0] -= 1
             room_described = False
         else:
             print 'I do not understand.\n'
+
+        if user_input in DIRECTIONS:
+            # check we can move that direction
+            location_id = world.create_location_id(new_location)
+            if location_id in world.world.keys():
+                player.current_location = new_location
+            else:
+                print 'You cannot move that way.\n'
+                room_described = True
 
         return room_described
 

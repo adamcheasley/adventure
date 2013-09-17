@@ -24,4 +24,4 @@ while True:
         print 'Goodbye\n'
         sys.exit(1)
     else:
-        room_described = utils.parse_user_input(user_input, player)
+        room_described = utils.parse_user_input(user_input, player, world)
