@@ -7,12 +7,13 @@ class Player(object):
         # check item is in room
         if not room.items:
             raise TypeError
-        if item != room.items[0].title:
+        if item != room.items[-1].title:
             raise TypeError
 
         if getattr(self, 'items', None) is None:
             self.items = []
         self.items.append(item)
+        room.items.pop()
         print 'Taken\n'
 
     def drop(self):
