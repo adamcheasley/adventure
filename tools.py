@@ -17,6 +17,7 @@ class Utils(object):
     def parse_user_input(self, user_input, player, world):
         room_described = True
         new_location = list(player.current_location)
+        room = world.current_room(player.current_location)
         # remove the verb 'go' as we only care about the direction
         if user_input.startswith('go'):
             user_input = user_input[3:]
@@ -37,6 +38,11 @@ class Utils(object):
         elif user_input in ['south', 's']:
             new_location[1] -= 1
             room_described = False
+        elif user_input.startswith('take'):
+            try:
+                player.take(user_input.split()[1], room)
+            except TypeError:
+                print 'You cannot take that.\n'
         else:
             print 'I do not understand.\n'
 
@@ -73,11 +79,14 @@ class World(object):
                 room_ob.items.append(Item(item['title']))
             self.world[location_id] = room_ob
 
+    def current_room(self, current_location):
+        return self.world.get(self.create_location_id(current_location))
+
     def describe_location(self, current_location):
         """
         returns the current room and any items
         """
-        location = self.world.get(self.create_location_id(current_location))
+        location = self.current_room(current_location)
         if location is not None:
             main_description = location.long_description
             if location.items:
