@@ -41,4 +41,4 @@ class Room(object):
         self.short_description = description[1]
 
     def items(self):
-        pass
+        return self.items
