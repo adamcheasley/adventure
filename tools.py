@@ -26,6 +26,9 @@ class Utils(object):
             print self.adventure_help()
         elif user_input == 'look':
             return False
+        elif user_input == 'inventory':
+            player.inventory()
+            return room_described
         elif user_input in ['east', 'e']:
             new_location[0] += 1
             room_described = False
