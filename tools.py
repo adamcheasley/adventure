@@ -46,6 +46,13 @@ class Utils(object):
                 player.take(user_input.split()[1], room)
             except TypeError:
                 print 'You cannot take that.\n'
+        elif user_input.startswith('drop'):
+            try:
+                player.drop(user_input.split()[1], room)
+            except KeyError:
+                print 'You do not have anything to drop!\n'
+            except TypeError:
+                print 'You do not have a %s.\n' % user_input.split()[1]
         else:
             print 'I do not understand.\n'
 
