@@ -3,8 +3,10 @@ class Player(object):
     def __init__(self, location):
         self.current_location = location
 
-    def take(self):
-        pass
+    def take(self, item):
+        if getattr(self, 'items', None) is None:
+            self.items = []
+        self.items.append(item)
 
     def drop(self):
         pass
