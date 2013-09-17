@@ -30,6 +30,12 @@ class Utils(object):
         elif user_input in ['west', 'w']:
             new_location[0] -= 1
             room_described = False
+        elif user_input in ['north', 'n']:
+            new_location[1] += 1
+            room_described = False
+        elif user_input in ['south', 's']:
+            new_location[1] -= 1
+            room_described = False
         else:
             print 'I do not understand.\n'
 
@@ -39,7 +45,7 @@ class Utils(object):
             if location_id in world.world.keys():
                 player.current_location = new_location
             else:
-                print 'You cannot move that way.\n'
+                print 'You cannot go that way.\n'
                 room_described = True
 
         return room_described
