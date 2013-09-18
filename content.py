@@ -44,19 +44,33 @@ class Player(object):
         else:
             print 'You are not carrying anything.\n'
 
+    def look(self, user_input, world):
+        input_list = user_input.split()
+        if len(input_list) == 1:
+            print world.describe_location(self.current_location)
+            return
+        # otherwise we need to look in our inventory and describe
+        # the item
+        if not getattr(self, 'items', False):
+            print 'You are not carrying anything.\n'
+        for item in self.items:
+            if item.title == input_list[1].strip():
+                print item.description
+                return
+        return 'You do not have one of those\n'
+
 
 class Item(object):
 
-    def __init__(self, title):
+    def __init__(self, title, description):
         self.title = title
-
-    def description(self):
-        pass
+        self.description = description
 
     def further_description(self):
         """
         used when a users 'looks' at this item
         """
+        pass
 
     def use_location(self):
         """

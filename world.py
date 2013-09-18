@@ -10,7 +10,9 @@ world = [
               'description': ('You enter a corridoor. To the north is a door.',
                               'bar'),
               'location': [1, 0, 0]},
-     'items': [{'title': 'key'}],
+     'items': [{'title': 'key',
+                'description': 'A laser cut key. It looks very new.'}
+               ],
      },
     {'room': {'title': 'Kitchen',
               'description': ('A very used kitchen. The exit is behind you to the south.',

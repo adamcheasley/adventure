@@ -33,8 +33,9 @@ class Utils(object):
 
         if user_input == 'help':
             print self.adventure_help()
-        elif user_input == 'look':
-            return False
+        elif user_input.startswith('look'):
+            player.look(user_input, world)
+            return room_described
         elif user_input == 'inventory':
             player.inventory()
             return room_described
@@ -95,7 +96,8 @@ class World(object):
             room_ob = Room(room['title'], room['description'])
             room_ob.items = []
             for item in items:
-                room_ob.items.append(Item(item['title']))
+                room_ob.items.append(Item(item['title'],
+                                          item.get('description', '')))
             self.world[location_id] = room_ob
 
     def current_room(self, current_location):
