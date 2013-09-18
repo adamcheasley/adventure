@@ -11,7 +11,16 @@ class Utils(object):
 
     def adventure_help(self):
         return dedent("""\
-        Welcome to adventure, written by Adam Forsythe-Cheasley.
+        Welcome to Adventure, written by Adam Forsythe-Cheasley.
+
+        Here is some useful information:
+
+        - Directions are: north, south, up, etc.
+
+        - These can be shortened to n, s, u, etc.
+
+        - Be very mindful of the time or date in any location. This will help you
+          a great deal as the game progresses.
         """)
 
     def parse_user_input(self, user_input, player, world):
