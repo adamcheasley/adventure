@@ -101,8 +101,11 @@ class World(object):
             main_description = '%s\n%s' % (location.title,
                                            location.long_description)
             if location.items:
-                return '%s\nThere is a %s here.' % (main_description,
-                                                    location.items[0].title)
+                all_items = ''
+                for item in location.items:
+                    all_items += '\nThere is a %s here.' % item.title
+                return '%s %s' % (main_description,
+                                  all_items)
             else:
                 return main_description
         else:
