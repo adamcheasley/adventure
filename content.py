@@ -1,3 +1,6 @@
+from utils import create_location_id
+
+
 class Player(object):
 
     def __init__(self, location):
@@ -59,12 +62,35 @@ class Player(object):
                 return
         return 'You do not have one of those\n'
 
+    def use(self, user_input, room):
+        # first see if we have that item
+        try:
+            requested_item = user_input.split()[1]
+        except IndexError:
+            return "Use what?\n"
+
+        found_item = None
+        for item in self.items:
+            if item.title == requested_item:
+                found_item = item
+        if found_item is None:
+            return "You don't have a %s" % requested_item
+
+        # check to see if that item can be used here
+        if create_location_id(item.use_location) != create_location_id(self.current_location):
+            return "Nothing happens.\n"
+
+        # perform the action
+        room.blocked = False
+        return room.unblocked
+
 
 class Item(object):
 
-    def __init__(self, title, description):
+    def __init__(self, title, description, use_location):
         self.title = title
         self.description = description
+        self.use_location = use_location
 
     def further_description(self):
         """
@@ -72,16 +98,13 @@ class Item(object):
         """
         pass
 
-    def use_location(self):
-        """
-        the location where this object should be used
-        """
-        pass
-
 
 class Room(object):
 
-    def __init__(self, title, description):
+    def __init__(self, title, description, blocked, blocked_reason, unblocked):
         self.title = title
         self.long_description = description[0]
         self.short_description = description[1]
+        self.blocked = blocked
+        self.blocked_reason = blocked_reason
+        self.unblocked = unblocked

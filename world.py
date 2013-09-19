@@ -2,7 +2,7 @@
 
 world = [
     {'room': {'title': 'Driveway',
-              'description': ("You are at the end of a long driveway.\nIn the distance is a large building. To either side is lush green grass. The drive leads north.",
+              'description': ("You are at the end of a long driveway.\nIn the distance is a large building. To either side is lush green grass.\nThe drive leads north.",
                               ''),
               'location': [0, 0, 0]},
      },
@@ -18,7 +18,10 @@ world = [
     {'room': {'title': 'Building door',
               'description': ("You are at the door to the building.",
                               ''),
-              'location': [0, 2, 0]},
+              'location': [0, 2, 0],
+              'blocked': True,
+              'blocked_reason': 'The door is locked\n',
+              'unblocked': 'The door opens\n'},
      },
     {'room': {'title': 'lobby',
               'description': ('You are in the lobby. There is a large digital clock on the wall which reads "09:32". To the east is a door.',

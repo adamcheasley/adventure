@@ -1,10 +1,11 @@
 from textwrap import dedent
 from content import Room
 from content import Item
+from utils import create_location_id
 
 
 DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
-              'down']
+              'down', 'in']
 
 
 class Utils(object):
@@ -36,6 +37,9 @@ class Utils(object):
         elif user_input.startswith('look'):
             player.look(user_input, world)
             return room_described
+        elif user_input.startswith('use'):
+            print player.use(user_input, room)
+            return room_described
         elif user_input == 'inventory':
             player.inventory()
             return room_described
@@ -45,7 +49,7 @@ class Utils(object):
         elif user_input in ['west', 'w']:
             new_location[0] -= 1
             room_described = False
-        elif user_input in ['north', 'n']:
+        elif user_input in ['north', 'n', 'in']:
             new_location[1] += 1
             room_described = False
         elif user_input in ['south', 's']:
@@ -68,7 +72,10 @@ class Utils(object):
 
         if user_input in DIRECTIONS:
             # check we can move that direction
-            location_id = world.create_location_id(new_location)
+            if room.blocked:
+                print room.blocked_reason
+                return True
+            location_id = create_location_id(new_location)
             if location_id in world.world.keys():
                 player.current_location = new_location
             else:
@@ -84,24 +91,26 @@ class World(object):
         self.adventure_map = adventure_map
         self.parse_map(self.adventure_map)
 
-    def create_location_id(self, location):
-        return '-'.join(str(x) for x in location)
-
     def parse_map(self, adventure_map):
         self.world = {}
         for ob in adventure_map:
             room = ob['room']
             items = ob.get('items', [])
-            location_id = self.create_location_id(room['location'])
-            room_ob = Room(room['title'], room['description'])
+            location_id = create_location_id(room['location'])
+            room_ob = Room(room['title'],
+                           room['description'],
+                           room.get('blocked', False),
+                           room.get('blocked_reason', ''),
+                           room.get('unblocked', ''))
             room_ob.items = []
             for item in items:
                 room_ob.items.append(Item(item['title'],
-                                          item.get('description', '')))
+                                          item.get('description', ''),
+                                          item.get('use_location', '')))
             self.world[location_id] = room_ob
 
     def current_room(self, current_location):
-        return self.world.get(self.create_location_id(current_location))
+        return self.world.get(create_location_id(current_location))
 
     def describe_location(self, current_location):
         """
