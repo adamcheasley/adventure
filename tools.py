@@ -91,7 +91,7 @@ class World(object):
         self.world = {}
         for ob in adventure_map:
             room = ob['room']
-            items = ob['items']
+            items = ob.get('items', [])
             location_id = self.create_location_id(room['location'])
             room_ob = Room(room['title'], room['description'])
             room_ob.items = []
