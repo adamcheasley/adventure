@@ -1,20 +1,13 @@
-from textwrap import dedent
 # each room has a Cartesian coordinate in three dimensions
 
 world = [
     {'room': {'title': 'Driveway',
-              'description': (dedent("""You are at the end of a long driveway.
-              In the distance is a large building. To either side is lush green grass.
-              The drive leads north.
-              """),
+              'description': ("You are at the end of a long driveway.\nIn the distance is a large building. To either side is lush green grass. The drive leads north.",
                               ''),
               'location': [0, 0, 0]},
      },
     {'room': {'title': 'Driveway',
-              'description': (dedent("""\
-              You are half way up the driveway. At the end of the drive is a
-              tall, moderen office building. The drive continues north.
-              """),
+              'description': ("You are half way up the driveway. At the end of the drive is a tall, moderen office building.\nThe drive continues north.",
                               ''),
               'location': [0, 1, 0]},
      'items': [{'title': 'key',
@@ -23,9 +16,7 @@ world = [
                ],
      },
     {'room': {'title': 'Building door',
-              'description': (dedent("""\
-              You are at the door to the building.
-              """),
+              'description': ("You are at the door to the building.",
                               ''),
               'location': [0, 2, 0]},
      },
