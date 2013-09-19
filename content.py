@@ -68,6 +68,8 @@ class Player(object):
             requested_item = user_input.split()[1]
         except IndexError:
             return "Use what?\n"
+        if not getattr(self, 'items', False):
+            return "You have nothing to use.\n"
 
         found_item = None
         for item in self.items:
