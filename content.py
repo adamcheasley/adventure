@@ -70,7 +70,7 @@ class Player(object):
         if not getattr(self, 'items', False):
             return 'You are not carrying anything.\n'
         for item in self.items:
-            if item.title == user_input[1].strip():
+            if item.title == user_input[-1]:
                 return item.description
         return 'You do not have one of those\n'
 

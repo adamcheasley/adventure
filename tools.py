@@ -64,6 +64,7 @@ class Utils(object):
                 return True
             location_id = create_location_id(new_location)
             if location_id in world.world.keys():
+                player.visited.add(create_location_id(player.current_location))
                 player.current_location = new_location
             else:
                 print 'You cannot go that way.\n'
