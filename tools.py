@@ -55,9 +55,9 @@ class Utils(object):
         elif user_input in ['south', 's']:
             new_location[1] -= 1
             room_described = False
-        elif user_input.startswith('take'):
+        elif user_input.startswith('take') or user_input.startswith('pick'):
             try:
-                player.take(user_input.split()[1], room)
+                print player.take(user_input, room)
             except TypeError:
                 print 'You cannot take that.\n'
         elif user_input.startswith('drop'):
@@ -67,6 +67,8 @@ class Utils(object):
                 print 'You do not have anything to drop!\n'
             except TypeError:
                 print 'You do not have a %s.\n' % user_input.split()[1]
+            except IndexError:
+                print 'Drop what?\n'
         else:
             print 'I do not understand.\n'
 

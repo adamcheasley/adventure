@@ -6,7 +6,18 @@ class Player(object):
     def __init__(self, location):
         self.current_location = location
 
-    def take(self, item, room):
+    def take(self, user_input, room):
+        input_list = user_input.split()
+        if len(input_list) == 1 and len(room.items) > 0:
+            # assume the user wants to pick up the first item in the room
+            if not getattr(self, 'items', False):
+                self.items = []
+            item = room.items.pop()
+            self.items.append(item)
+            return 'Took %s\n' % item.title
+
+        # otherwise they have asked to pick up a specific item
+        item = input_list[-1]
         # check item is in room
         if not room.items:
             raise TypeError
@@ -18,7 +29,7 @@ class Player(object):
             self.items = []
         self.items.append(item_to_add[0])
         room.items.pop()
-        print 'Taken\n'
+        return 'Taken\n'
 
     def drop(self, item, room):
         if not getattr(self, 'items', False):
