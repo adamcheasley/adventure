@@ -7,8 +7,7 @@ class Player(object):
         self.current_location = location
 
     def take(self, user_input, room):
-        input_list = user_input.split()
-        if len(input_list) == 1 and len(room.items) > 0:
+        if not user_input and len(room.items) > 0:
             # assume the user wants to pick up the first item in the room
             if not getattr(self, 'items', False):
                 self.items = []
@@ -17,7 +16,7 @@ class Player(object):
             return 'Took %s\n' % item.title
 
         # otherwise they have asked to pick up a specific item
-        item = input_list[-1]
+        item = user_input[-1]
         # check item is in room
         if not room.items:
             raise TypeError
@@ -32,13 +31,17 @@ class Player(object):
         return 'Taken\n'
 
     def drop(self, item, room):
+        try:
+            item = item[0]
+        except IndexError:
+            return 'Drop what?\n'
         if not getattr(self, 'items', False):
-            raise KeyError
+            return 'You are not carrying anything.\n'
         if not self.items:
-            raise KeyError
+            return 'You are not carrying anything.\n'
         item_titles = [x.title for x in self.items]
         if item not in item_titles:
-            raise TypeError
+            return 'You are not carrying a %s' % item
 
         new_items = []
         for player_item in self.items:
@@ -48,41 +51,38 @@ class Player(object):
                 item_for_room = player_item
         self.items = new_items
         room.items.append(item_for_room)
-        print 'Dropped\n'
+        return 'Dropped\n'
 
-    def inventory(self):
+    def inventory(self, user_input, room):
         if getattr(self, 'items', None) is not None:
-            print 'You are carrying:\n'
+            s = 'You are carrying:\n'
             for item in self.items:
-                print item.title
+                s += 'A %s\n' % item.title
+            return s
         else:
-            print 'You are not carrying anything.\n'
+            return 'You are not carrying anything.\n'
 
-    def look(self, user_input, world):
-        input_list = user_input.split()
-        if len(input_list) == 1:
-            print world.describe_location(self.current_location)
-            return
+    def look(self, user_input, room):
+        if not user_input:
+            return room.describe_location()
         # otherwise we need to look in our inventory and describe
         # the item
         if not getattr(self, 'items', False):
-            print 'You are not carrying anything.\n'
+            return 'You are not carrying anything.\n'
         for item in self.items:
-            if item.title == input_list[1].strip():
-                print item.description
-                return
+            if item.title == user_input[1].strip():
+                return item.description
         return 'You do not have one of those\n'
 
     def use(self, user_input, room):
         # first see if we have that item
-        try:
-            requested_item = user_input.split()[1]
-        except IndexError:
+        if not user_input:
             return "Use what?\n"
         if not getattr(self, 'items', False):
             return "You have nothing to use.\n"
 
         found_item = None
+        requested_item = user_input[0]
         for item in self.items:
             if item.title == requested_item:
                 found_item = item
@@ -121,3 +121,18 @@ class Room(object):
         self.blocked = blocked
         self.blocked_reason = blocked_reason
         self.unblocked = unblocked
+
+    def describe_location(self):
+        """
+        returns the current room and any items
+        """
+        main_description = '%s\n%s' % (self.title,
+                                       self.long_description)
+        if self.items:
+            all_items = ''
+            for item in self.items:
+                all_items += '\nThere is a %s here.' % item.title
+            return '%s %s' % (main_description,
+                              all_items)
+        else:
+            return main_description

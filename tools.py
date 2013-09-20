@@ -31,18 +31,11 @@ class Utils(object):
         # remove the verb 'go' as we only care about the direction
         if user_input.startswith('go'):
             user_input = user_input[3:]
+        if user_input.startswith('pick'):
+            user_input = user_input.replace('pick', 'take')
 
         if user_input == 'help':
             print self.adventure_help()
-        elif user_input.startswith('look'):
-            player.look(user_input, world)
-            return room_described
-        elif user_input.startswith('use'):
-            print player.use(user_input, room)
-            return room_described
-        elif user_input == 'inventory':
-            player.inventory()
-            return room_described
         elif user_input in ['east', 'e']:
             new_location[0] += 1
             room_described = False
@@ -55,22 +48,14 @@ class Utils(object):
         elif user_input in ['south', 's']:
             new_location[1] -= 1
             room_described = False
-        elif user_input.startswith('take') or user_input.startswith('pick'):
-            try:
-                print player.take(user_input, room)
-            except TypeError:
-                print 'You cannot take that.\n'
-        elif user_input.startswith('drop'):
-            try:
-                player.drop(user_input.split()[1], room)
-            except KeyError:
-                print 'You do not have anything to drop!\n'
-            except TypeError:
-                print 'You do not have a %s.\n' % user_input.split()[1]
-            except IndexError:
-                print 'Drop what?\n'
         else:
-            print 'I do not understand.\n'
+            # otherwise assume this is a verb that the user can deal with
+            input_list = user_input.split()
+            try:
+                print getattr(player, input_list[0])(input_list[1:], room)
+            except AttributeError:
+                print 'I do not understand.\n'
+            return room_described
 
         if user_input in DIRECTIONS:
             # check we can move that direction
@@ -113,22 +98,3 @@ class World(object):
 
     def current_room(self, current_location):
         return self.world.get(create_location_id(current_location))
-
-    def describe_location(self, current_location):
-        """
-        returns the current room and any items
-        """
-        location = self.current_room(current_location)
-        if location is not None:
-            main_description = '%s\n%s' % (location.title,
-                                           location.long_description)
-            if location.items:
-                all_items = ''
-                for item in location.items:
-                    all_items += '\nThere is a %s here.' % item.title
-                return '%s %s' % (main_description,
-                                  all_items)
-            else:
-                return main_description
-        else:
-            return 'You are lost.\n'

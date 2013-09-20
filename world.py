@@ -1,7 +1,7 @@
 # each room has a Cartesian coordinate in three dimensions
 
 world = [
-    {'room': {'title': 'Driveway',
+    {'room': {'title': 'Gate',
               'description': ("You are at the end of a long driveway.\nIn the distance is a large building. To either side is lush green grass.\nThe drive leads north.",
                               ''),
               'location': [0, 0, 0]},
@@ -23,8 +23,8 @@ world = [
               'blocked_reason': 'The door is locked\n',
               'unblocked': 'The door opens\n'},
      },
-    {'room': {'title': 'lobby',
-              'description': ('You are in the lobby. There is a large digital clock on the wall which reads "09:32". To the east is a door.',
+    {'room': {'title': 'Lobby',
+              'description': ('You are in the lobby. There is a large digital clock on the wall\nwhich reads "09:32". To the east is a door.',
                               'bar'),
               'location': [0, 3, 0]},
      },

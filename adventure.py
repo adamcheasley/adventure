@@ -17,7 +17,8 @@ room_described = False
 
 while True:
     if not room_described:
-        print '%s\n' % world.describe_location(player.current_location)
+        room = world.current_room(player.current_location)
+        print '%s\n' % room.describe_location()
 
     user_input = raw_input('>:')
     if user_input == 'exit':
