@@ -58,12 +58,12 @@ class Utils(object):
             return room_described
 
         if user_input in DIRECTIONS:
+            new_location_id = create_location_id(new_location)
             # check we can move that direction
-            if room.blocked:
+            if room.blocked and new_location_id not in player.visited:
                 print room.blocked_reason
                 return True
-            location_id = create_location_id(new_location)
-            if location_id in world.world.keys():
+            if new_location_id in world.world.keys():
                 player.visited.add(create_location_id(player.current_location))
                 player.current_location = new_location
             else:
