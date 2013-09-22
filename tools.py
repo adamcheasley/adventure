@@ -22,6 +22,8 @@ class Utils(object):
 
         - Be very mindful of the time or date in any location. This will help you
           a great deal as the game progresses.
+
+        - Your backpack will only hold 5 items. You can drop items at any time.
         """)
 
     def parse_user_input(self, user_input, player, world):
