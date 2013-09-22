@@ -7,6 +7,12 @@ class Player(object):
         self.current_location = location
 
     def take(self, user_input, room):
+        """
+        a player is only allowed to hold up to 5 items
+        """
+        if getattr(self, 'items', False) and len(self.items) == 5:
+            return 'Your backpack can only hold up to 5 items'
+
         if not user_input and len(room.items) > 0:
             # assume the user wants to pick up the first item in the room
             if not getattr(self, 'items', False):
