@@ -1,4 +1,4 @@
 adventure
 =========
 
-A text adventure game written in python.
+A text adventure game featuring time travel.
