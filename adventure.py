@@ -24,6 +24,7 @@ room = world.current_room(player.current_location)
 print '%s\n' % room.describe_location()
 room_described = True
 
+# main execution loop
 while True:
     if not room_described:
         if create_location_id(player.current_location) in player.visited:
