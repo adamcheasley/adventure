@@ -10,7 +10,7 @@ from utils import create_location_id
 
 print "Welcome player."
 print "Two days ago, you awoke to find the world you knew had changed dramatically."
-print "The busy city where you once lived was now almost silent."
+print "The busy city where you once lived is now almost silent."
 print "There are no cars on the roads, no planes in the sky\nand the electricity is intermittent."
 print "For the last two days you have been wandering aimlessly, looking for answers."
 print
