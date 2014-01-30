@@ -16,7 +16,7 @@ world = [
                ],
      },
     {'room': {'title': 'Building door',
-              'description': ("You are at the door to the building.",
+              'description': ("You are at the door to the building. It appears to be locked.",
                               ''),
               'location': [0, 2, 0],
               'blocked': True,
