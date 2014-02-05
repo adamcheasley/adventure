@@ -91,7 +91,9 @@ class World(object):
                            room['description'],
                            room.get('blocked', False),
                            room.get('blocked_reason', ''),
-                           room.get('unblocked', ''))
+                           room.get('unblocked', ''),
+                           room.get('blocked_description', ''),
+                           )
             room_ob.items = []
             for item in items:
                 room_ob.items.append(Item(item['title'],

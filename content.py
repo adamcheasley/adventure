@@ -120,13 +120,15 @@ class Item(object):
 
 class Room(object):
 
-    def __init__(self, title, description, blocked, blocked_reason, unblocked):
+    def __init__(self, title, description, blocked, blocked_reason, unblocked,
+                 blocked_description):
         self.title = title
         self.long_description = description[0]
         self.short_description = description[1]
         self.blocked = blocked
         self.blocked_reason = blocked_reason
         self.unblocked = unblocked
+        self.blocked_description = blocked_description
 
     def describe_location(self):
         """
@@ -134,6 +136,11 @@ class Room(object):
         """
         main_description = '%s\n%s' % (self.title,
                                        self.long_description)
+        # if the room is blocked, we add the blocked_description
+        if self.blocked:
+            main_description = '%s %s' % (main_description,
+                                          self.blocked_description)
+
         if self.items:
             all_items = ''
             for item in self.items:
