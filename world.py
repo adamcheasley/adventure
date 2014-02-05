@@ -1,4 +1,18 @@
+"""
 # each room has a Cartesian coordinate in three dimensions
+{'room': {'title': str,
+          'description': (long, short),
+          'location': [x, y, z],
+          'blocked': bool,
+          'blocked_reason': str,
+          'blocked_description': str,  # This is added to the description if the room
+                                       # is blocked
+          'unblocked': str  # This is printed when the room is unlocked},
+ 'item': [{'title': str,
+           'description': str,
+           'use_location' [x, y, z],  # Where this is item needed}],
+}
+"""
 
 world = [
     {'room': {'title': 'Gate',

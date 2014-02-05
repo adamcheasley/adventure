@@ -8,6 +8,7 @@ from content import Player
 from utils import create_location_id
 
 
+# initial scene setting
 print "Welcome player."
 print "Two days ago, you awoke to find the world you knew had changed dramatically."
 print "The busy city where you once lived is now almost silent."
