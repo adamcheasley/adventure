@@ -14,7 +14,7 @@
 }
 """
 
-world = [
+main_map = [
     {'room': {'title': 'Gate',
               'description': ("You are at the end of a long driveway.\nIn the distance is a large building. \nTo either side is grass and then a high concrete wall.\nThe drive leads north.",
                               ''),
