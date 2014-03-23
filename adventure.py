@@ -3,7 +3,7 @@
 import sys
 from tools import World
 from tools import Utils
-from world import world as world_info
+from map import main_map
 from content import Player
 from utils import create_location_id
 
@@ -17,7 +17,7 @@ print "For the last two days you have been wandering aimlessly, looking for answ
 print
 
 # initialise the map
-world = World(world_info)
+world = World(main_map)
 utils = Utils()
 player = Player([0, 0, 0])
 player.visited = set([])

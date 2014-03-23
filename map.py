@@ -14,7 +14,7 @@
 }
 """
 
-world = [
+main_map = [
     {'room': {'title': 'Gate',
               'description': ("You are at the end of a long driveway.\nIn the distance is a large building. \nTo either side is grass and then a high concrete wall.\nThe drive leads north.",
                               ''),
@@ -56,13 +56,18 @@ world = [
                 'use_location': [4, 5, 6]}],
      },
     {'room': {'title': 'Corridoor',
-              'description': ('A blank corridoor. To the north is a lift door.',
+              'description': ('A blank corridoor. To the north is a door.',
                               'bar'),
               'location': [1, 4, 0]},
      },
-    {'room': {'title': 'Lift',
-              'description': ("You are in the building's lift.",
-                              'bar'),
+    {'room': {'title': 'Stairwell',
+              'description': ("You are in the stairwell of the building. Steps lead up to the next floor.",
+                              ''),
               'location': [1, 5, 0]},
+     },
+    {'room': {'title': 'Stairwell',
+              'description': ("You are in the stairwell of the building. Steps lead up and down.",
+                              ''),
+              'location': [1, 5, 1]},
      },
 ]

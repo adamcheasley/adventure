@@ -50,6 +50,12 @@ class Utils(object):
         elif user_input in ['south', 's']:
             new_location[1] -= 1
             room_described = False
+        elif user_input == 'up':
+            new_location[2] += 1
+            room_described = False
+        elif user_input == 'down':
+            new_location[2] -= 1
+            room_described = False
         else:
             # otherwise assume this is a verb that the user can deal with
             input_list = user_input.split()
