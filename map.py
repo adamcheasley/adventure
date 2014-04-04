@@ -16,7 +16,10 @@
 
 main_map = [
     {'room': {'title': 'Gate',
-              'description': ("You are at the end of a long driveway.\nIn the distance is a large building. \nTo either side is grass and then a high concrete wall.\nThe drive leads north.",
+              'description': (("You are at the end of a long driveway.\nIn the "
+                               "distance is a large building. \nTo either side is "
+                               "grass and then a high concrete wall.\nThe drive leads"
+                               " north."),
                               ''),
               'location': [0, 0, 0]},
      },
@@ -66,8 +69,18 @@ main_map = [
               'location': [1, 5, 0]},
      },
     {'room': {'title': 'Stairwell',
-              'description': ("You are in the stairwell of the building. Steps lead up and down.",
+              'description': (("You are in the stairwell of the building. "
+                              "Steps lead up and down. There is a door to the south."),
                               ''),
               'location': [1, 5, 1]},
+     },
+    {'room': {'title': 'Lab',
+              'description': ("You are in a dark laboritory.",
+                              ''),
+              'location': [1, 4, 1]},
+     'item': [{'title': 'Portable time machine',
+               'description': ('A small device which appears to allow one to travel'
+                               ' through time!'),
+               'use_location': None}],
      },
 ]
