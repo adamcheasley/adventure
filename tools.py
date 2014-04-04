@@ -18,7 +18,9 @@ class Utils(object):
 
         - Directions are: north, south, up, etc.
 
-        - These can be shortened to n, s, u, etc.
+        - These can be shortened to n, s, u
+
+        - Try other commands, e.g. in, use, look etc.
 
         - Be very mindful of the time or date in any location. This will help you
           a great deal as the game progresses.
