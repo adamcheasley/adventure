@@ -94,7 +94,7 @@ main_map = [
               'description': ("You are in a dark laboritory.",
                               ''),
               'location': [1, 4, 1]},
-     'items': [{'title': 'Portable time machine',
+     'items': [{'title': 'time machine',
                 'description': ('A small device which appears to allow'
                                 ' one to travel through time!'),
                 'use_location': None}],

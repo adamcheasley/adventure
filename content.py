@@ -21,12 +21,12 @@ class Player(object):
             self.items.append(item)
             return 'Took %s\n' % item.title
 
-        # otherwise they have asked to pick up a specific item
-        item = user_input[-1]
+        # otherwise they have asked to pick up a specific item so
         # check item is in room
         if not room.items:
             raise TypeError
-        item_to_add = [x for x in room.items if x.title == item]
+        item_to_add = [x for x in room.items
+                       if x.title.lower() == ' '.join(user_input).lower()]
         if not item_to_add:
             raise TypeError
 
@@ -96,7 +96,9 @@ class Player(object):
             return "You don't have a %s" % requested_item
 
         # check to see if that item can be used here
-        if create_location_id(item.use_location) != create_location_id(self.current_location):
+        if create_location_id(
+                item.use_location) != create_location_id(
+                    self.current_location):
             return "Nothing happens.\n"
 
         # perform the action
