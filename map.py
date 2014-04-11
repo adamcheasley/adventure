@@ -59,8 +59,8 @@ main_map = [
      },
     {'room': {'title': 'Office',
               'description': (('A regular looking office. There is'
-                               ' a desk with a phone and computer.'
-                               ' To the north is a door.'),
+                               ' a desk with a phone and computer.\n'
+                               'To the north is a door.'),
                               'bar'),
               'location': [1, 3, 0]},
      },
@@ -85,7 +85,7 @@ main_map = [
      },
     {'room': {'title': 'Stairwell',
               'description': (("You are in the stairwell of the building. "
-                               "Steps lead up and down. "
+                               "Steps lead up and down.\n"
                                "There is a door to the south."),
                               ''),
               'location': [1, 5, 1]},
