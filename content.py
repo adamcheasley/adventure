@@ -37,14 +37,13 @@ class Player(object):
         return 'Taken\n'
 
     def drop(self, item, room):
-        try:
-            item = item[0]
-        except IndexError:
+        if not item:
             return 'Drop what?\n'
         if not getattr(self, 'items', False):
             return 'You are not carrying anything.\n'
         if not self.items:
             return 'You are not carrying anything.\n'
+        item = ' '.join(item)
         item_titles = [x.title for x in self.items]
         if item not in item_titles:
             return 'You are not carrying a %s' % item
@@ -88,7 +87,7 @@ class Player(object):
             return "You have nothing to use.\n"
 
         found_item = None
-        requested_item = user_input[0]
+        requested_item = ' '.join(user_input)
         for item in self.items:
             if item.title == requested_item:
                 found_item = item
@@ -96,9 +95,10 @@ class Player(object):
             return "You don't have a %s" % requested_item
 
         # check to see if that item can be used here
-        if create_location_id(
-                item.use_location) != create_location_id(
-                    self.current_location):
+        use_location = item.use_location
+        if use_location is None or create_location_id(
+                use_location) != create_location_id(
+                self.current_location):
             return "Nothing happens.\n"
 
         # perform the action
