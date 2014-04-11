@@ -120,6 +120,20 @@ class Item(object):
         pass
 
 
+class TimeMachine(Item):
+
+    def set_time(self):
+        pass
+
+    def travel(self):
+        pass
+
+    def output(self):
+        """
+        shows the user the current date/time set on the dial
+        """
+
+
 class Room(object):
 
     def __init__(self, title, description, blocked, blocked_reason, unblocked,
