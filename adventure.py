@@ -1,20 +1,22 @@
 #!/usr/bin/python
 
 import sys
-from tools import World
 from tools import Utils
 from map import main_map
 from content import Player
+from content import World
 from utils import create_location_id
 
 
 # initial scene setting
 print "Welcome player."
-print "Two days ago, you awoke to find the world you knew had changed dramatically."
+print ("Two days ago, you awoke to find"
+       " the world you knew had changed dramatically.")
 print "The busy city where you once lived is now almost silent."
-print "There are no cars on the roads, no planes in the sky\nand the electricity is intermittent."
-print "For the last two days you have been wandering aimlessly, looking for answers."
-print
+print ("There are no cars on the roads, "
+       "no planes in the sky\nand the electricity is intermittent.")
+print ("For the last two days you have "
+       "been wandering aimlessly, looking for answers.\n")
 
 # initialise the map
 world = World(main_map)

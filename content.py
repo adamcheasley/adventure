@@ -1,6 +1,36 @@
 from utils import create_location_id
 
 
+class World(object):
+
+    def __init__(self, adventure_map):
+        self.adventure_map = adventure_map
+        self.parse_map(self.adventure_map)
+
+    def parse_map(self, adventure_map):
+        self.world = {}
+        for ob in adventure_map:
+            room = ob['room']
+            items = ob.get('items', [])
+            location_id = create_location_id(room['location'])
+            room_ob = Room(room['title'],
+                           room['description'],
+                           room.get('blocked', False),
+                           room.get('blocked_reason', ''),
+                           room.get('unblocked', ''),
+                           room.get('blocked_description', ''),
+                           )
+            room_ob.items = []
+            for item in items:
+                room_ob.items.append(Item(item['title'],
+                                          item.get('description', ''),
+                                          item.get('use_location', '')))
+            self.world[location_id] = room_ob
+
+    def current_room(self, current_location):
+        return self.world.get(create_location_id(current_location))
+
+
 class Player(object):
 
     def __init__(self, location):
@@ -59,7 +89,7 @@ class Player(object):
         return 'Dropped\n'
 
     def inventory(self, user_input, room):
-        if getattr(self, 'items', None) is not None:
+        if getattr(self, 'items', []):
             s = 'You are carrying:\n'
             for item in self.items:
                 s += 'A %s\n' % item.title
