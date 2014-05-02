@@ -139,6 +139,11 @@ class Watch(Item):
     the watch lets the user check what time/date it is
     """
 
+    def output(self):
+        """
+        shows the current date/time
+        """
+
 
 class Room(object):
 
