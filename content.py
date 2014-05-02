@@ -134,6 +134,12 @@ class TimeMachine(Item):
         """
 
 
+class Watch(Item):
+    """
+    the watch lets the user check what time/date it is
+    """
+
+
 class Room(object):
 
     def __init__(self, title, description, blocked, blocked_reason, unblocked,
