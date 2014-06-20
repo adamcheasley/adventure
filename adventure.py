@@ -14,7 +14,8 @@ print ("Two days ago, you awoke to find"
        " the world you knew had changed dramatically.")
 print "The busy city where you once lived is now almost silent."
 print ("There are no cars on the roads, "
-       "no planes in the sky\nand the electricity is intermittent.")
+       "no planes in the sky\nand no people on the streets.")
+print "The electricity in what's left of the city is intermittent."
 print ("For the last two days you have "
        "been wandering aimlessly, looking for answers.\n")
 
