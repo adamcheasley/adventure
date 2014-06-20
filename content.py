@@ -104,8 +104,9 @@ class Player(object):
         # the item
         if not getattr(self, 'items', False):
             return 'You are not carrying anything.\n'
+
         for item in self.items:
-            if item.title == user_input[-1]:
+            if item.title == ' '.join(user_input).lower():
                 return item.description
         return 'You do not have one of those\n'
 
