@@ -63,6 +63,8 @@ class Utils(object):
                 print getattr(player, input_list[0])(input_list[1:], room)
             except AttributeError:
                 print 'I do not understand.\n'
+            except TypeError:
+                print "I cannot do that.\n"
             return room_described
 
         if user_input in DIRECTIONS:
