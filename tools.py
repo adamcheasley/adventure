@@ -20,7 +20,8 @@ class Utils(object):
 
         - Try other commands, e.g. in, use, look etc.
 
-        - Be very mindful of the time or date in any location. This will help you
+        - Be very mindful of the time or date in any location.
+          This will help you
           a great deal as the game progresses.
 
         - Your backpack will only hold 5 items. You can drop items at any time.
@@ -29,7 +30,7 @@ class Utils(object):
     def parse_user_input(self, user_input, player, world):
         room_described = True
         new_location = list(player.current_location)
-        room = world.current_room(player.current_location)
+        room = world.current_room()
         # remove the verb 'go' as we only care about the direction
         if user_input.startswith('go'):
             user_input = user_input[3:]

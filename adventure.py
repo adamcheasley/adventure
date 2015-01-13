@@ -3,7 +3,6 @@
 import sys
 from tools import Utils
 from map import main_map
-from content import Player
 from content import World
 from utils import create_location_id
 
@@ -22,9 +21,8 @@ print("For the last two days you have "
 # initialise the map
 world = World(main_map)
 utils = Utils()
-player = Player([0, 0, 0])
-player.visited = set([])
-room = world.current_room(player.current_location)
+room = world.current_room()
+player = world.player
 print('%s\n' % room.describe_location())
 room_described = True
 
@@ -43,4 +41,4 @@ while True:
     else:
         room_described = utils.parse_user_input(user_input, player, world)
 
-    room = world.current_room(player.current_location)
+    room = world.current_room()

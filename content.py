@@ -4,6 +4,9 @@ from utils import create_location_id
 class World(object):
 
     def __init__(self, adventure_map):
+        player = Player([0, 0, 0], self)
+        player.visited = set([])
+        self.player = player
         self.adventure_map = adventure_map
         self.parse_map(self.adventure_map)
 
@@ -27,13 +30,15 @@ class World(object):
                                           item.get('use_location', '')))
             self.world[location_id] = room_ob
 
-    def current_room(self, current_location):
-        return self.world.get(create_location_id(current_location))
+    def current_room(self):
+        return self.world.get(
+            create_location_id(self.player.current_location))
 
 
 class Player(object):
 
-    def __init__(self, location):
+    def __init__(self, location, world):
+        self.world = world
         self.current_location = location
 
     def take(self, user_input, room):
