@@ -5,7 +5,6 @@ class World(object):
 
     def __init__(self, adventure_map):
         player = Player([0, 0, 0], self)
-        player.visited = set([])
         self.player = player
         self.adventure_map = adventure_map
         self.parse_map(self.adventure_map)
@@ -25,9 +24,18 @@ class World(object):
                            )
             room_ob.items = []
             for item in items:
-                room_ob.items.append(Item(item['title'],
-                                          item.get('description', ''),
-                                          item.get('use_location', '')))
+                if item['title'] == 'time machine':
+                    room_ob.items.append(
+                        TimeMachine(item['title'],
+                                    item.get('description', ''),
+                                    item.get('use_location', ''))
+                    )
+                else:
+                    room_ob.items.append(
+                        Item(item['title'],
+                             item.get('description', ''),
+                             item.get('use_location', ''))
+                    )
             self.world[location_id] = room_ob
 
     def current_room(self):
@@ -40,6 +48,7 @@ class Player(object):
     def __init__(self, location, world):
         self.world = world
         self.current_location = location
+        self.visited = set([])
 
     def take(self, user_input, room):
         """
