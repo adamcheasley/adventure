@@ -8,6 +8,7 @@ class World(object):
         self.player = player
         self.adventure_map = adventure_map
         self.parse_map(self.adventure_map)
+        self.date = 'present'
 
     def parse_map(self, adventure_map):
         self.world = {}
@@ -41,6 +42,12 @@ class World(object):
     def current_room(self):
         return self.world.get(
             create_location_id(self.player.current_location))
+
+    def toggle_date(self):
+        if self.date == 'present':
+            self.date = 'past'
+        else:
+            self.date = 'present'
 
 
 class Player(object):
@@ -141,7 +148,10 @@ class Player(object):
 
         # check to see if that item can be used here
         use_location = item.use_location
-        if use_location is None or create_location_id(
+        if item.title == 'time machine':
+            self.world.toggle_date()
+            print("There is a blinding light. You feel strange.")
+        elif use_location is None or create_location_id(
                 use_location) != create_location_id(
                 self.current_location):
             return "Nothing happens.\n"
@@ -162,7 +172,6 @@ class Item(object):
         """
         used when a users 'looks' at this item
         """
-        pass
 
 
 class TimeMachine(Item):
