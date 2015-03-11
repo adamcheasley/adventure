@@ -1,5 +1,5 @@
 """
-# each room has a Cartesian coordinate in three dimensions
+# each room has a set of coordinates indicating its place in three dimensions
 {'room': {'title': str,
           'description': (long, short),
           'location': [x, y, z],
