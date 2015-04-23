@@ -9,3 +9,8 @@ Map updates
 -----------
 
 Player meets a scientist in the main building which explains more of the story.
+
+Game engine
+-----------
+
+It should be possible to take a closer look at objects in the room. Currently, the 'look' command only looks for items in your inventory.
