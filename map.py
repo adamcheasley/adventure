@@ -91,7 +91,8 @@ main_map = [
               'location': [1, 5, 1]},
      },
     {'room': {'title': 'Lab',
-              'description': ("You are in a dark laboritory.",
+              'description': (("You are in a dark laboritory. "
+                               "To the north is the door."),
                               ''),
               'location': [1, 4, 1]},
      'items': [{'title': 'time machine',
