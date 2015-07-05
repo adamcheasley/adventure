@@ -1,3 +1,5 @@
+- Update map definition to use YAML, no python dict.
+
 Time machine
 ------------
 
