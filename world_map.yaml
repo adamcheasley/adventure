@@ -1,0 +1,12 @@
+
+present:
+  0-0-0:
+    title: Gate
+    description: ["You are at the end of a long driveway.\nIn the  distance is a large building. \nTo either side is grass and then a high concrete wall.\nThe drive leads north.", '']
+  0-1-0:
+    title: Driveway
+    description: ["You are half way up the driveway. At the end of the drive is a tall,\nmodern office building.\nThe drive continues north.", '']
+    room_items:
+      description: A laser cut key. It looks very new.
+      title: key
+      use_location: [0, 2, 0]
