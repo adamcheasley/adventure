@@ -52,8 +52,13 @@ class Player(object):
 
     def __init__(self, location, world):
         self.world = world
-        self.current_location = location
-        self.visited = set([])
+        self.current_coordinates = location
+        self.visited = set()
+
+    def current_location(self):
+        """Gives the current coords in form 'x-y-z'
+        """
+        return self.current_coordinates.split('-')
 
     def take(self, user_input, room):
         """
