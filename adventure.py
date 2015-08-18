@@ -7,15 +7,15 @@ from content import World
 
 
 # initial scene setting
-print("Welcome player.")
-print("Two days ago, you awoke to find"
-      " the world you knew had changed dramatically.")
-print("The busy city where you once lived is now almost silent.")
-print("There are no cars on the roads, "
-      "no planes in the sky\nand no people on the streets.")
-print("The electricity in what's left of the city is intermittent.")
-print("For the last two days you have "
-      "been wandering aimlessly, looking for answers.\n")
+print(u"Welcome player.")
+print(u"Two days ago, you awoke to find"
+      u" the world you knew had changed dramatically.")
+print(u"The busy city where you once lived is now almost silent.")
+print(u"There are no cars on the roads, "
+      u"no planes in the sky\nand no people on the streets.")
+print(u"The electricity in what's left of the city is intermittent.")
+print(u"For the last two days you have "
+      u"been wandering aimlessly, looking for answers.\n")
 
 # initialise the map
 map_file = open('world_map.yaml', 'r')

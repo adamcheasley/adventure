@@ -8,7 +8,7 @@ DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
 class Utils(object):
 
     def adventure_help(self):
-        return dedent("""\
+        return dedent(u"""\
         Welcome to Adventure, written by Adam Forsythe-Cheasley.
 
         Here is some useful information:

@@ -17,6 +17,7 @@ class World(object):
                     'room_items', [])
                 room_ob = Room(room['title'],
                                room['description'],
+                               room.get('short_description', ''),
                                room.get('blocked', False),
                                room.get('blocked_reason', ''),
                                room.get('unblocked', ''),
@@ -39,7 +40,7 @@ class World(object):
                 self.world[location_id] = room_ob
 
     def current_room(self):
-        return self.world.get(self.player.current_location)
+        return self.world.get(self.player.current_location())
 
     def toggle_date(self):
         if self.date == 'present':
@@ -58,7 +59,7 @@ class Player(object):
     def current_location(self):
         """Gives the current coords in form 'x-y-z'
         """
-        return self.current_coordinates.split('-')
+        return '-'.join(str(x) for x in self.current_coordinates)
 
     def take(self, user_input, room):
         """
@@ -204,11 +205,12 @@ class Watch(Item):
 
 class Room(object):
 
-    def __init__(self, title, description, blocked, blocked_reason, unblocked,
+    def __init__(self, title, description, short_description,
+                 blocked, blocked_reason, unblocked,
                  blocked_description):
         self.title = title
-        self.long_description = description[0]
-        self.short_description = description[1]
+        self.long_description = description
+        self.short_description = short_description
         self.blocked = blocked
         self.blocked_reason = blocked_reason
         self.unblocked = unblocked
