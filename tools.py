@@ -1,5 +1,4 @@
 from textwrap import dedent
-from utils import create_location_id
 
 
 DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
@@ -69,13 +68,13 @@ class Utils(object):
             return room_described
 
         if user_input in DIRECTIONS:
-            new_location_id = create_location_id(new_location)
+            new_location_id = new_location
             # check we can move that direction
             if room.blocked and new_location_id not in player.visited:
                 print(room.blocked_reason)
                 return True
             if new_location_id in world.world.keys():
-                player.visited.add(create_location_id(player.current_location))
+                player.visited.add(player.current_location)
                 player.current_location = new_location
             else:
                 print('You cannot go that way.\n')
