@@ -4,7 +4,6 @@ import sys
 import yaml
 from tools import Utils
 from content import World
-from utils import create_location_id
 
 
 # initial scene setting
@@ -31,7 +30,7 @@ room_described = True
 # main execution loop
 while True:
     if not room_described:
-        if create_location_id(player.current_location) in player.visited:
+        if player.current_location in player.visited:
             print('%s\n' % room.title)
         else:
             print('%s\n' % room.describe_location())
