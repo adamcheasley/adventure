@@ -1,8 +1,8 @@
 #!/usr/bin/python
 
 import sys
+import yaml
 from tools import Utils
-from map import main_map
 from content import World
 from utils import create_location_id
 
@@ -19,6 +19,8 @@ print("For the last two days you have "
       "been wandering aimlessly, looking for answers.\n")
 
 # initialise the map
+map_file = open('world_map.yaml', 'r')
+main_map = yaml.load(map_file.read())
 world = World(main_map)
 utils = Utils()
 room = world.current_room()

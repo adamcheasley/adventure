@@ -1,4 +1,3 @@
-from utils import create_location_id
 
 
 class World(object):
@@ -12,36 +11,35 @@ class World(object):
 
     def parse_map(self, adventure_map):
         self.world = {}
-        for ob in adventure_map:
-            room = ob['room']
-            items = ob.get('items', [])
-            location_id = create_location_id(room['location'])
-            room_ob = Room(room['title'],
-                           room['description'],
-                           room.get('blocked', False),
-                           room.get('blocked_reason', ''),
-                           room.get('unblocked', ''),
-                           room.get('blocked_description', ''),
-                           )
-            room_ob.items = []
-            for item in items:
-                if item['title'] == 'time machine':
-                    room_ob.items.append(
-                        TimeMachine(item['title'],
-                                    item.get('description', ''),
-                                    item.get('use_location', ''))
-                    )
-                else:
-                    room_ob.items.append(
-                        Item(item['title'],
-                             item.get('description', ''),
-                             item.get('use_location', ''))
-                    )
-            self.world[location_id] = room_ob
+        for timezone, map_details in adventure_map.items():
+            for location_id, room in map_details.items():
+                room_item = room.get(
+                    'room_items', [])
+                room_ob = Room(room['title'],
+                               room['description'],
+                               room.get('blocked', False),
+                               room.get('blocked_reason', ''),
+                               room.get('unblocked', ''),
+                               room.get('blocked_description', ''),
+                               )
+                room_ob.items = []
+                if room_item:
+                    if room_item['title'] == 'time machine':
+                        room_ob.items.append(
+                            TimeMachine(room_item['title'],
+                                        room_item.get('description', ''),
+                                        room_item.get('use_location', ''))
+                        )
+                    else:
+                        room_ob.items.append(
+                            Item(room_item['title'],
+                                 room_item.get('description', ''),
+                                 room_item.get('use_location', ''))
+                        )
+                self.world[location_id] = room_ob
 
     def current_room(self):
-        return self.world.get(
-            create_location_id(self.player.current_location))
+        return self.world.get(self.player.current_location)
 
     def toggle_date(self):
         if self.date == 'present':
