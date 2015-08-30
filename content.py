@@ -1,3 +1,4 @@
+from tools import array_to_id
 
 
 class World(object):
@@ -59,7 +60,7 @@ class Player(object):
     def current_location(self):
         """Gives the current coords in form 'x-y-z'
         """
-        return '-'.join(str(x) for x in self.current_coordinates)
+        return array_to_id(self.current_coordinates)
 
     def take(self, user_input, room):
         """
