@@ -14,7 +14,7 @@ present:
     title: Building door
     description: "You are at the door to the building."
     blocked: true
-    blocked_reason: 'The door is locked\n'
+    blocked_reason: "The door is locked\n"
     blocked_description: It appears to be locked.
     unblocked: "You insert the key into the massive door.\nThere is some clunking and a couple of beeps and finally, the door opens\n"
   0-3-0:
