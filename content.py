@@ -156,9 +156,8 @@ class Player(object):
         if item.title == 'time machine':
             self.world.toggle_date()
             print("There is a blinding light. You feel strange.")
-        elif use_location is None or create_location_id(
-                use_location) != create_location_id(
-                self.current_location):
+        elif use_location is None or array_to_id(
+                use_location) != self.current_location():
             return "Nothing happens.\n"
 
         # perform the action
