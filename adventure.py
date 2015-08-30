@@ -1,24 +1,25 @@
 #!/usr/bin/python
 
 import sys
+import yaml
 from tools import Utils
-from map import main_map
 from content import World
-from utils import create_location_id
 
 
 # initial scene setting
-print("Welcome player.")
-print("Two days ago, you awoke to find"
-      " the world you knew had changed dramatically.")
-print("The busy city where you once lived is now almost silent.")
-print("There are no cars on the roads, "
-      "no planes in the sky\nand no people on the streets.")
-print("The electricity in what's left of the city is intermittent.")
-print("For the last two days you have "
-      "been wandering aimlessly, looking for answers.\n")
+print(u"Welcome player.")
+print(u"Two days ago, you awoke to find"
+      u" the world you knew had changed dramatically.")
+print(u"The busy city where you once lived is now almost silent.")
+print(u"There are no cars on the roads, "
+      u"no planes in the sky\nand no people on the streets.")
+print(u"The electricity in what's left of the city is intermittent.")
+print(u"For the last two days you have "
+      u"been wandering aimlessly, looking for answers.\n")
 
 # initialise the map
+map_file = open('world_map.yaml', 'r')
+main_map = yaml.load(map_file.read())
 world = World(main_map)
 utils = Utils()
 room = world.current_room()
@@ -29,7 +30,7 @@ room_described = True
 # main execution loop
 while True:
     if not room_described:
-        if create_location_id(player.current_location) in player.visited:
+        if player.current_location() in player.visited:
             print('%s\n' % room.title)
         else:
             print('%s\n' % room.describe_location())
