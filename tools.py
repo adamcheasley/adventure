@@ -32,8 +32,11 @@ class Utils(object):
 
     def parse_user_input(self, user_input, player, world):
         room_described = True
-        new_location = player.current_coordinates
+        # create a copy of the current coordinates to store new
+        # coordinates into
+        new_location = list(player.current_coordinates)
         room = world.current_room()
+
         # remove the verb 'go' as we only care about the direction
         if user_input.startswith('go'):
             user_input = user_input[3:]
