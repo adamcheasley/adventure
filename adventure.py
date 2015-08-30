@@ -30,7 +30,7 @@ room_described = True
 # main execution loop
 while True:
     if not room_described:
-        if player.current_location in player.visited:
+        if player.current_location() in player.visited:
             print('%s\n' % room.title)
         else:
             print('%s\n' % room.describe_location())

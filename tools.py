@@ -78,7 +78,7 @@ class Utils(object):
                 print(room.blocked_reason)
                 return True
             if new_location_id in world.world.keys():
-                player.visited.add(player.current_location)
+                player.visited.add(player.current_location())
                 player.current_coordinates = new_location
             else:
                 print('You cannot go that way.\n')
