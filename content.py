@@ -50,17 +50,24 @@ class World(object):
             self.date = 'present'
 
 
-class Player(object):
+class Human(object):
 
-    def __init__(self, location, world):
-        self.world = world
+    def __init__(self, location):
         self.current_coordinates = location
-        self.visited = set()
 
     def current_location(self):
         """Gives the current coords in form 'x-y-z'
         """
         return array_to_id(self.current_coordinates)
+
+
+class Player(Human):
+
+    def __init__(self, location, world):
+        self.world = world
+        self.current_coordinates = location
+        self.visited = set()
+        self.items = []
 
     def take(self, user_input, room):
         """
@@ -71,8 +78,6 @@ class Player(object):
 
         if not user_input and len(room.items) > 0:
             # assume the user wants to pick up the first item in the room
-            if not getattr(self, 'items', False):
-                self.items = []
             item = room.items.pop()
             self.items.append(item)
             return 'Took %s\n' % item.title
@@ -145,9 +150,10 @@ class Player(object):
 
         found_item = None
         requested_item = ' '.join(user_input)
-        for item in self.items:
+        for index, item in enumerate(self.items):
             if item.title == requested_item:
                 found_item = item
+                del self.items[index]
         if found_item is None:
             return "You don't have a %s" % requested_item
 
