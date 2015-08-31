@@ -35,7 +35,7 @@ present:
   1-5-0:
     title: Stairwell
     description: "You are in the stairwell of the building. Steps lead up and down.\nThere is a door to the south."
-  1-4-1:
+  1-5-1:
     title: Lab
     description: You are in a dark laboritory. To the north is the door.
     room_items:
