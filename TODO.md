@@ -10,6 +10,11 @@ Player meets a scientist in the main building which explains more of the story.
 
 Add a puzzle/cipher to solve.
 
+## Meeting other people
+
+The player should meet other people in the world. These people will give the player information or just objects they need. They will be more complex than the other objects.
+The player can speak to each actor. When they do, the prompt should change to describe the conversation, i.e. who is speaking when.
+
 ## Game engine
 
 It should be possible to take a closer look at objects in the room. Currently, the 'look' command only looks for items in your inventory.
