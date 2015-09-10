@@ -129,17 +129,23 @@ class Player(Human):
             return 'You are not carrying anything.\n'
 
     def look(self, user_input, room):
+        """If user types just 'look', describe the room,
+        If not, look at what they are carrying for a match,
+        or look at the objects in the room.
+        """
         if not user_input:
             return room.describe_location()
-        # otherwise we need to look in our inventory and describe
-        # the item
-        if not getattr(self, 'items', False):
-            return 'You are not carrying anything.\n'
 
+        joined_input = ' '.join(user_input).lower()
         for item in self.items:
-            if item.title == ' '.join(user_input).lower():
+            if item.title == joined_input:
                 return item.description
-        return 'You do not have one of those\n'
+
+        for item in room.items:
+            if item.title == joined_input:
+                return item.description
+
+        return 'I cannot see a {}\n'.format(joined_input)
 
     def use(self, user_input, room):
         # first see if we have that item
