@@ -39,6 +39,13 @@ present:
     title: Stairwell
     description: "You are in the stairwell of the building. Steps lead up and down.\nThere is a door to the south."
   1-5-1:
+    title: Hall
+    description: "HUMAN!"
+    room_items:
+      title: human_1
+      description: In the dark hallway, there is a man...
+      use_location: null
+  1-5-10:
     title: Lab
     description: You are in a dark laboritory. To the north is the door.
     room_items:

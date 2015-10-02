@@ -4,6 +4,7 @@ import sys
 import yaml
 from tools import Utils
 from content import World
+from sprites import ScientistOne
 
 
 # initial scene setting
@@ -17,14 +18,20 @@ print(u"The electricity in what's left of the city is intermittent.")
 print(u"For the last two days you have "
       u"been wandering aimlessly, looking for answers.\n")
 
+# initialise sprites
+sprites = {
+    'human_1': ScientistOne(),
+}
+
 # initialise the map
 map_file = open('world_map.yaml', 'r')
 main_map = yaml.load(map_file.read())
-world = World(main_map)
+world = World(main_map, sprites=sprites)
 utils = Utils()
 room = world.current_room()
 player = world.player
-print('%s\n' % room.describe_location())
+room.describe_location()
+print('\n')
 room_described = True
 
 # main execution loop
@@ -33,7 +40,8 @@ while True:
         if player.current_location() in player.visited:
             print('%s\n' % room.title)
         else:
-            print('%s\n' % room.describe_location())
+            room.describe_location()
+            print('\n')
 
     try:
         user_input = input('>:')

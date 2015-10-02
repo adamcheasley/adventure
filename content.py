@@ -3,10 +3,11 @@ from tools import array_to_id
 
 class World(object):
 
-    def __init__(self, adventure_map):
+    def __init__(self, adventure_map, sprites=None):
         player = Player([0, 0, 0], self)
         self.player = player
         self.adventure_map = adventure_map
+        self.sprites = sprites
         self.parse_map(self.adventure_map)
         self.date = 'present'
 
@@ -14,8 +15,7 @@ class World(object):
         self.world = {}
         for timezone, map_details in adventure_map.items():
             for location_id, room in map_details.items():
-                room_item = room.get(
-                    'room_items', [])
+                room_item = room.get('room_items', [])
                 room_ob = Room(room['title'],
                                room['description'],
                                room.get('short_description', ''),
@@ -25,6 +25,7 @@ class World(object):
                                room.get('blocked_description', ''),
                                )
                 room_ob.items = []
+                room_ob.sprites = []
                 if room_item:
                     if room_item['title'] == 'time machine':
                         room_ob.items.append(
@@ -32,6 +33,9 @@ class World(object):
                                         room_item.get('description', ''),
                                         room_item.get('use_location', ''))
                         )
+                    elif room_item['title'].startswith('human'):
+                        room_ob.sprites.append(
+                            self.sprites.get(room_item['title']))
                     else:
                         room_ob.items.append(
                             Item(room_item['title'],
@@ -52,13 +56,17 @@ class World(object):
 
 class Human(object):
 
-    def __init__(self, location):
+    def __init__(self, location=None):
         self.current_coordinates = location
 
     def current_location(self):
         """Gives the current coords in form 'x-y-z'
         """
         return array_to_id(self.current_coordinates)
+
+    def back_story(self):
+        """If this user has a story to tell, they do it here.
+        """
 
 
 class Player(Human):
@@ -250,7 +258,11 @@ class Room(object):
             all_items = ''
             for item in self.items:
                 all_items += '\nThere is a %s here.' % item.title
-            return '%s %s' % (main_description,
-                              all_items)
+            print('{} {}'.format(
+                main_description, all_items))
         else:
-            return main_description
+            print(main_description)
+
+        if self.sprites:
+            for sprite in self.sprites:
+                sprite.back_story()
