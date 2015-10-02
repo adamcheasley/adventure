@@ -35,7 +35,12 @@ while True:
         else:
             print('%s\n' % room.describe_location())
 
-    user_input = input('>:')
+    try:
+        user_input = input('>:')
+    except:
+        print('Goodbye\n')
+        sys.exit(1)
+
     if user_input in ['exit', 'quit', 'q']:
         print('Goodbye\n')
         sys.exit(1)
