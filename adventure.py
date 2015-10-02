@@ -7,7 +7,7 @@ from content import World
 
 
 # initial scene setting
-print(u"Welcome player.")
+print(u"\n\n\n\nWelcome player.")
 print(u"Two days ago, you awoke to find"
       u" the world you knew had changed dramatically.")
 print(u"The busy city where you once lived is now almost silent.")
