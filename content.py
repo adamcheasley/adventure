@@ -251,8 +251,9 @@ class Room(object):
                                        self.long_description)
         # if the room is blocked, we add the blocked_description
         if self.blocked:
-            main_description = '%s %s' % (main_description,
-                                          self.blocked_description)
+            main_description = '%s \n%s' % (
+                main_description,
+                self.blocked_description)
 
         if self.items:
             all_items = ''

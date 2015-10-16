@@ -12,10 +12,10 @@ present:
       use_location: [0, 2, 0]
   0-2-0:
     title: Building door
-    description: "You are at the door to the building."
+    description: "You are at the door to the office building.\nThis appears to be the main entrance to the building.\nInside you can see a reception area."
     blocked: true
     blocked_reason: "The door is locked\n"
-    blocked_description: It appears to be locked.
+    blocked_description: The door appears to be locked.
     unblocked: "You insert the key into the massive door.\nThere is some clunking and a couple of beeps and finally, the door opens\n"
   0-3-0:
     title: Lobby
