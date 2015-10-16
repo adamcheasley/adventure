@@ -30,7 +30,7 @@ world = World(main_map, sprites=sprites)
 utils = Utils()
 room = world.current_room()
 player = world.player
-room.describe_location()
+print(room.describe_location())
 print('\n')
 room_described = True
 
@@ -40,7 +40,7 @@ while True:
         if player.current_location() in player.visited:
             print('%s\n' % room.title)
         else:
-            room.describe_location()
+            print(room.describe_location())
             print('\n')
 
     try:

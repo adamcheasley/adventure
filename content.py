@@ -259,10 +259,10 @@ class Room(object):
             all_items = ''
             for item in self.items:
                 all_items += '\nThere is a %s here.' % item.title
-            print('{} {}'.format(
-                main_description, all_items))
+            return '{} {}'.format(
+                main_description, all_items)
         else:
-            print(main_description)
+            return main_description
 
         if self.sprites:
             for sprite in self.sprites:
