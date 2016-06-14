@@ -153,7 +153,7 @@ class Player(Human):
             if item.title == joined_input:
                 return item.description
 
-        return 'I cannot see a {}\n'.format(joined_input)
+        return 'I cannot see that'
 
     def use(self, user_input, room):
         # first see if we have that item
