@@ -34,3 +34,6 @@ nosetests.xml
 .project
 .pydevproject
 pip-selfcheck.json
+
+.Python
+include/
