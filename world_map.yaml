@@ -7,9 +7,9 @@ present:
     title: Driveway
     description: "You are half way up the driveway. At the end of the drive is a tall,\nmodern office building.\nThe drive continues north."
     room_items:
-      description: A laser cut key. It looks very new.
-      title: key
-      use_location: [0, 2, 0]
+      - title: key
+        description: A laser cut key. It looks very new.
+        use_location: [0, 2, 0]
   0-2-0:
     title: Building door
     description: "You are at the door to the office building.\nThis appears to be the main entrance to the building.\nInside you can see a reception area."
@@ -24,14 +24,14 @@ present:
     title: Office
     description: "A regular looking office. There are a few desks with some papers, phones and personal effects.\nTo the north is a door."
     room_items:
-      title: computer
-      description: A standard beige computer. The power is off.
+      - title: computer
+        description: A standard beige computer. The power is off.
   0-4-0:
     title: Kitchen
     description: "A very used kitchen. The exit is behind you to the south."
     room_items:
-      title: watch
-      use_location: [4, 5, 6]
+      - title: watch
+        use_location: [4, 5, 6]
   1-4-0:
     title: Corridoor
     description: "A blank corridoor. To the north is a door."
@@ -42,13 +42,13 @@ present:
     title: Hall
     description: "HUMAN!"
     room_items:
-      title: human_1
-      description: In the dark hallway, there is a man...
-      use_location: null
+      - title: human_1
+        description: In the dark hallway, there is a man...
+        use_location: null
   1-5-10:
     title: Lab
     description: You are in a dark laboritory. To the north is the door.
     room_items:
-      title: time machine
-      description: "A small device which appears to allow one to travel through time!\nThere is a single button on the device."
-      use_location: null
+      - title: time machine
+        description: "A small device which appears to allow one to travel through time!\nThere is a single button on the device."
+        use_location: null

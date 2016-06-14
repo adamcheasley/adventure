@@ -15,7 +15,7 @@ class World(object):
         self.world = {}
         for timezone, map_details in adventure_map.items():
             for location_id, room in map_details.items():
-                room_item = room.get('room_items', [])
+                room_items = room.get('room_items', [])
                 room_ob = Room(room['title'],
                                room['description'],
                                room.get('short_description', ''),
@@ -26,7 +26,7 @@ class World(object):
                                )
                 room_ob.items = []
                 room_ob.sprites = []
-                if room_item:
+                for room_item in room_items:
                     if room_item['title'] == 'time machine':
                         room_ob.items.append(
                             TimeMachine(room_item['title'],
