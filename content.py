@@ -40,7 +40,8 @@ class World(object):
                         room_ob.items.append(
                             Item(room_item['title'],
                                  room_item.get('description', ''),
-                                 room_item.get('use_location', ''))
+                                 room_item.get('use_location', ''),
+                                 room_item.get('hidden', False))
                         )
                 self.world[location_id] = room_ob
 
@@ -194,10 +195,11 @@ class Actor(Human):
 
 class Item(object):
 
-    def __init__(self, title, description, use_location):
+    def __init__(self, title, description, use_location, hidden):
         self.title = title
         self.description = description
         self.use_location = use_location
+        self.hidden = hidden
 
     def further_description(self):
         """
@@ -206,6 +208,11 @@ class Item(object):
 
 
 class TimeMachine(Item):
+
+    def __init__(self, title, description, use_location):
+        self.title = title
+        self.description = description
+        self.use_location = use_location
 
     def set_time(self):
         pass
@@ -223,6 +230,11 @@ class Watch(Item):
     """
     the watch lets the user check what time/date it is
     """
+
+    def __init__(self, title, description, use_location):
+        self.title = title
+        self.description = description
+        self.use_location = use_location
 
     def output(self):
         """
@@ -258,7 +270,8 @@ class Room(object):
         if self.items:
             all_items = ''
             for item in self.items:
-                all_items += '\nThere is a %s here.' % item.title
+                if not item.hidden:
+                    all_items += '\nThere is a %s here.' % item.title
             return '{} {}'.format(
                 main_description, all_items)
         else:
