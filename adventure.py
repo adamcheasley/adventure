@@ -1,11 +1,12 @@
 #!/usr/bin/python
 
 import sys
-import yaml
-from tools import Utils
-from content import World
-from sprites import ScientistOne
 
+import yaml
+from content import World
+from exc import GameOver
+from sprites import ScientistOne
+from tools import Utils
 
 # initial scene setting
 print(u"\n\n\n\nWelcome player.")
@@ -53,6 +54,10 @@ while True:
         print('Goodbye\n')
         sys.exit(1)
     else:
-        room_described = utils.parse_user_input(user_input, player, world)
+        try:
+            room_described = utils.parse_user_input(user_input, player, world)
+        except GameOver:
+            print("You are dead.")
+            sys.exit(1)
 
     room = world.current_room()

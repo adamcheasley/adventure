@@ -7,6 +7,7 @@ present:
       - title: grass
         description: Plain old grass. Nothing special about it.
         hidden: true
+        when_eaten: The grass does not taste nice.
       - title: wall
         description: A very high wall. There is some graffiti scrawled there saying, "end of days"
         hidden: true
@@ -17,6 +18,8 @@ present:
       - title: key
         description: A laser cut key. It looks very new.
         use_location: [0, 2, 0]
+        when_eaten: You swallow the key. It does not taste nice.
+        death_if_eaten: true
   0-2-0:
     title: Building door
     description: "You are at the door to the office building.\nThis appears to be the main entrance to the building.\nInside you can see a reception area."
