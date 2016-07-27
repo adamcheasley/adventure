@@ -27,21 +27,32 @@ present:
     blocked_reason: "The door is locked\n"
     blocked_description: The door appears to be locked.
     unblocked: "You insert the key into the massive door.\nThere is some clunking and a couple of beeps and finally, the door opens\n"
+    room_items:
+      - title: door
+        description: A huge locked door is in front of you.
+        hidden: true
   0-3-0:
     title: Lobby
     description: "You are in the lobby. There is a huge sign on the wall which reads 'BFC Laboratories'. \nThere is also a large digital clock on the wall\nwhich reads 09:32. To the east is a door."
+    room_items:
+      - title: clock
+        description: A digital clock giving the current time.
+        hidden: true
   1-3-0:
     title: Office
     description: "A regular looking office. There are a few desks with some papers, phones and personal effects.\nTo the north is a door."
     room_items:
       - title: computer
         description: A standard beige computer. The power is off.
+        when_eaten: You gnaw at the computer, but it is too difficult to eat the whole thing.
   0-4-0:
     title: Kitchen
     description: "A very used kitchen. The exit is behind you to the south."
     room_items:
       - title: watch
         use_location: [4, 5, 6]
+        when_eaten: You swallow the watch. You feel funny.
+        death_if_eaten: true
   1-4-0:
     title: Corridoor
     description: "A blank corridoor. To the north is a door."
