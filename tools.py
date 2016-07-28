@@ -1,6 +1,5 @@
 from textwrap import dedent
 
-
 DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
               'down', 'in']
 
@@ -31,6 +30,7 @@ class Utils(object):
         """)
 
     def parse_user_input(self, user_input, player, world):
+        user_input = user_input.strip()
         room_described = True
         # create a copy of the current coordinates to store new
         # coordinates into
