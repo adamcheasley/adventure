@@ -6,7 +6,7 @@ import yaml
 from content import World
 from exc import GameOver
 from sprites import ScientistOne
-from tools import Utils
+from tools import parse_user_input
 
 # initial scene setting
 print(u"\n\n\n\nWelcome player.")
@@ -28,7 +28,6 @@ sprites = {
 map_file = open('world_map.yaml', 'r')
 main_map = yaml.load(map_file.read())
 world = World(main_map, sprites=sprites)
-utils = Utils()
 room = world.current_room()
 player = world.player
 print(room.describe_location())
@@ -55,7 +54,7 @@ while True:
         sys.exit(1)
     else:
         try:
-            room_described = utils.parse_user_input(user_input, player, world)
+            room_described = parse_user_input(user_input, player, world)
         except GameOver:
             print("You are dead.")
             sys.exit(1)
