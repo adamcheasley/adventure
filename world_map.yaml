@@ -61,10 +61,9 @@ present:
     description: "You are in the stairwell of the building. Steps lead up and down.\nThere is a door to the south."
   1-5-1:
     title: Hall
-    description: "HUMAN!"
+    description: "In the dark hallway, there is a man. He's wearing a lab coat, but it's hard to tell as he is so dirty. He's coughing and has his eyes closed. He does not look well."
     room_items:
       - title: human_1
-        description: In the dark hallway, there is a man...
         use_location: null
   1-5-10:
     title: Lab
