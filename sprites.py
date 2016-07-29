@@ -11,6 +11,6 @@ class ScientistOne(Human):
     def back_story(self):
         return dedent("""\
         \nHere is a lot of text.\n
-        Just testing how this would work.\n\n
-        Needs updating.
+Just testing how this would work.\n\n
+Needs updating.
         """)
