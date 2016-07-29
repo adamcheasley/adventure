@@ -1,3 +1,6 @@
+## Back story
+The scientists went into the future and brought back a virus. This virus had mutated so much that we could not fight it. We must go back in time and stop them from going into the future.
+
 ## Time machine
 
 Time machine should not allow the user to enter datetimes. The time travel should be triggered through the story and the user should work out to what time they have been transported.
@@ -10,11 +13,9 @@ Player meets a scientist in the main building which explains more of the story.
 
 Add a puzzle/cipher to solve.
 
+The computer in the office building should be able to be turned on and then display something.
+
 ## Meeting other people
 
 The player should meet other people in the world. These people will give the player information or just objects they need. They will be more complex than the other objects.
-The player can speak to each actor. When they do, the prompt should change to describe the conversation, i.e. who is speaking when.
-
-## Game engine
-
-It should be possible to take a closer look at objects in the room. Currently, the 'look' command only looks for items in your inventory.
+The player can speak to each actor. When they do, the prompt should change to describe the conversation, i.e. who is speaking when. The player could choose from a set of responses.
