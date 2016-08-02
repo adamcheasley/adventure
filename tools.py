@@ -45,6 +45,9 @@ def parse_user_input(user_input, player, world):
         user_input = user_input.replace('pick', 'take')
     elif user_input.startswith('walk'):
         user_input = user_input[3:]
+    elif user_input.startswith(
+            'turn on') or user_input.startswith('switch on'):
+        user_input = ' '.join(user_input.split()[1:])
 
     if user_input == 'help':
         print(adventure_help())

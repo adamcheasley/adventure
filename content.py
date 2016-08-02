@@ -32,9 +32,9 @@ class World(object):
                             room_item.get('description', ''),
                             room_item.get('use_location', ''))
                         room_ob.items[room_item['title']] = time_machine
-                    elif room_item['title'].startswith('human'):
-                        room_ob.sprites.append(
-                            self.sprites.get(room_item['title']))
+                    elif room_item.get('sprite_id', None) is not None:
+                        sprite = self.sprites[room_item['sprite_id']]
+                        room_ob.items[sprite.title] = sprite
                     else:
                         item = Item(
                             room_item['title'],
@@ -144,9 +144,14 @@ class Player(Human):
             pass
 
         try:
-            return room.items[joined_input].description
+            item = room.items[joined_input]
         except KeyError:
             return 'I cannot see that'
+        else:
+            try:
+                return item.back_story()
+            except AttributeError:
+                return item.description
 
     def use(self, user_input, room):
         # first see if we have that item
@@ -197,6 +202,12 @@ class Player(Human):
             print(found_item.when_eaten)
             raise GameOver()
         return found_item.when_eaten or "I can't eat that"
+
+    def on(self, user_input, room):
+        try:
+            return room.items[user_input[0]].on()
+        except AttributeError:
+            return "I can't seem to turn it on."
 
 
 class Actor(Human):
@@ -293,9 +304,5 @@ class Room(object):
                     all_items += '\nThere is a %s here.' % item.title
             main_description = '{} {}'.format(
                 main_description, all_items)
-
-        if self.sprites:
-            for sprite in self.sprites:
-                main_description += sprite.back_story()
 
         return main_description

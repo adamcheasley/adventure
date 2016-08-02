@@ -1,7 +1,7 @@
 
 present:
   0-0-0:
-    title: Gate
+    title: Driveway
     description: "You are at the end of a long driveway.\nIn the distance is a large building. \nTo either side is grass and then a high concrete wall.\nThe drive leads north."
     room_items:
       - title: grass
@@ -43,8 +43,7 @@ present:
     description: "A regular looking office. There are a few desks with some papers, phones and personal effects.\nTo the north is a door."
     room_items:
       - title: computer
-        description: A standard beige computer. The power is off.
-        when_eaten: You gnaw at the computer, but it is too difficult to eat the whole thing.
+        sprite_id: computer_1
   0-4-0:
     title: Kitchen
     description: "A very used kitchen. The exit is behind you to the south."
@@ -63,7 +62,8 @@ present:
     title: Hall
     description: "In the dark hallway, there is a man. He's wearing a lab coat, but it's hard to tell as he is so dirty. He's coughing and has his eyes closed. He does not look well."
     room_items:
-      - title: human_1
+      - title: human
+        sprite_id: human_1
         use_location: null
   1-5-10:
     title: Lab
