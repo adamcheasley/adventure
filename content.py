@@ -210,13 +210,6 @@ class Player(Human):
             return "I can't seem to turn it on."
 
 
-class Actor(Human):
-    """These are the actors with which the player will interact
-    during the game. These actors can give information to the player
-    or simply give them an object.
-    """
-
-
 class Item(object):
 
     def __init__(self, title, description, use_location, hidden, when_eaten):
