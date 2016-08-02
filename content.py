@@ -62,6 +62,7 @@ class Human(object):
 
     def __init__(self, location=None):
         self.current_coordinates = location
+        self.told_back_story = False
 
     def current_location(self):
         """Gives the current coords in form 'x-y-z'
@@ -137,9 +138,10 @@ class Player(Human):
             return room.describe_location()
 
         joined_input = ' '.join(user_input).lower()
-        for item in self.items:
-            if item.title == joined_input:
-                return item.description
+        try:
+            return self.items[joined_input].description
+        except KeyError:
+            pass
 
         try:
             return room.items[joined_input].description
@@ -192,6 +194,7 @@ class Player(Human):
                 return "I cannot see a {}".format(requested_item)
 
         if found_item.death_if_eaten:
+            print(found_item.when_eaten)
             raise GameOver()
         return found_item.when_eaten or "I can't eat that"
 
