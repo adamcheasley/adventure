@@ -13,7 +13,7 @@ present:
         hidden: true
   0-1-0:
     title: Driveway
-    description: "You are half way up the driveway. At the end of the drive is a tall,\nmodern office building.\nThe drive continues north."
+    description: "you are dead because you went here"
     room_items:
       - title: key
         description: A laser cut key. It looks very new.
@@ -65,6 +65,10 @@ present:
       - title: human
         sprite_id: human_1
         use_location: null
+  1-5-2:
+    title: Death zone
+    description: You are dead because you went here.
+    death_if_entered: true
   1-5-10:
     title: Lab
     description: You are in a dark laboritory. To the north is the door.
