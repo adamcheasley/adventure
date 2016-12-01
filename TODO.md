@@ -1,5 +1,9 @@
 ## Back story
-The scientists went into the future and brought back a virus. This virus had mutated so much that we could not fight it. We must go back in time and stop them from going into the future.
+The scientists went into the future and brought back a virus. This virus had mutated so much that we could not fight it. The player can either go back in time and stop them from going into the future, or go into the future and bring back a cure. The cure can be found at a regular chemist.
+
+The story starts on a deserted motorway. One side, coming out of the closest city is filled with cars. The side going in is empty. The player needs to walk into the city. On the way, they find a security van with the key to the science building. They then find the building and go in. On the second floor they find the scientist who explains what's happened. On the third floor is the time machine.
+
+The time machine is essentially 'stuck', so it can only go back about 3 months, or forward to the time the scientists picked up the virus.
 
 ## Time machine
 
