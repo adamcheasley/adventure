@@ -39,3 +39,4 @@ pip-selfcheck.json
 include/
 .DS_Store
 .cache
+*~
