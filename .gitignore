@@ -37,3 +37,5 @@ pip-selfcheck.json
 
 .Python
 include/
+.DS_Store
+.cache
