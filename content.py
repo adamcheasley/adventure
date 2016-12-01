@@ -24,6 +24,7 @@ class World(object):
                                room.get('blocked_reason', ''),
                                room.get('unblocked', ''),
                                room.get('blocked_description', ''),
+                               room.get('death_if_entered', False),
                                )
                 for room_item in room_items:
                     if room_item['title'] == 'time machine':
@@ -222,11 +223,6 @@ class Item(object):
     def __repr__(self):
         return "<Item: {}>".format(self.title)
 
-    def further_description(self):
-        """
-        used when a users 'looks' at this item
-        """
-
 
 class TimeMachine(Item):
 
@@ -267,16 +263,18 @@ class Room(object):
 
     def __init__(self, title, description, short_description,
                  blocked, blocked_reason, unblocked,
-                 blocked_description):
+                 blocked_description, death_if_entered):
         self.title = title
         self.long_description = description
         self.short_description = short_description
         self.blocked = blocked
+        # this is a message to the player when room is unblocked
         self.blocked_reason = blocked_reason
         self.unblocked = unblocked
         self.blocked_description = blocked_description
         self.items = {}
         self.sprites = []
+        self.death_if_entered = death_if_entered
 
     def describe_location(self):
         """
@@ -293,8 +291,13 @@ class Room(object):
         if self.items:
             all_items = ''
             for item in self.items.values():
-                if not item.hidden:
-                    all_items += '\nThere is a %s here.' % item.title
+                try:
+                    hidden = item.hidden
+                except AttributeError:
+                    pass
+                else:
+                    if not hidden:
+                        all_items += '\nThere is a %s here.' % item.title
             main_description = '{} {}'.format(
                 main_description, all_items)
 
