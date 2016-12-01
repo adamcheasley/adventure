@@ -23,8 +23,8 @@ print("\n\n\n\nWelcome player.\n"
 # initialise sprites
 sprites = {x.sprite_id: x() for x in sprites_to_init}
 
-# initialise the map
-map_file = open('world_map.yaml', 'r')
+# initialise the map and game state
+map_file = open('new_map.yaml', 'r')
 main_map = yaml.load(map_file.read())
 world = World(main_map, sprites=sprites)
 room = world.current_room()
@@ -32,14 +32,13 @@ player = world.player
 print(room.describe_location())
 print('\n')
 room_described = True
-game_over = False
 exit_text = 'Goodbye\n'
 
 # main execution loop
-while not game_over:
+while True:
     if not room_described:
         if room.death_if_entered:
-            exit_text = print("{}\n\n".format(room.long_description))
+            exit_text = "{}\n\n".format(room.long_description)
             break
         elif player.current_location() in player.visited:
             print('%s\n' % room.title)

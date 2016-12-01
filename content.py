@@ -5,7 +5,7 @@ from tools import array_to_id
 class World(object):
 
     def __init__(self, adventure_map, sprites=None):
-        player = Player([0, 0, 0], self)
+        player = Player([1, 0, 0], self)  # [x, y, z]
         self.player = player
         self.adventure_map = adventure_map
         self.sprites = sprites
@@ -13,7 +13,7 @@ class World(object):
         self.date = 'present'
 
     def parse_map(self, adventure_map):
-        self.world = {}
+        self.world = {'past': {}, 'present': {}, 'future': {}}
         for timezone, map_details in adventure_map.items():
             for location_id, room in map_details.items():
                 room_items = room.get('room_items', [])
@@ -47,10 +47,13 @@ class World(object):
                         item.death_if_eaten = room_item.get(
                             'death_if_eaten', False)
                         room_ob.items[room_item['title']] = item
-                self.world[location_id] = room_ob
+                self.world[timezone][location_id] = room_ob
 
     def current_room(self):
-        return self.world.get(self.player.current_location())
+        return self.world[self.date].get(self.player.current_location())
+
+    def valid_move(self, new_location_id):
+        return new_location_id in self.world[self.date]
 
     def toggle_date(self):
         if self.date == 'present':

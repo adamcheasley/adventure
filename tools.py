@@ -1,7 +1,18 @@
 from textwrap import dedent
 
-DIRECTIONS = ['north', 'n', 'east', 'e', 'south', 's', 'west', 'w', 'up',
-              'down', 'in']
+DIRECTIONS = {
+    'north',
+    'n',
+    'east',
+    'e',
+    'south',
+    's',
+    'west',
+    'w',
+    'up',
+    'down',
+    'in',
+}
 
 
 def array_to_id(array):
@@ -49,26 +60,22 @@ def parse_user_input(user_input, player, world):
             'turn on') or user_input.startswith('switch on'):
         user_input = ' '.join(user_input.split()[1:])
 
+    # http://www.quickforge.co.uk/catalog/view/theme/default/image/3D-XYZ-Graph.gif
+    # negative on x/y are flipped
     if user_input == 'help':
         print(adventure_help())
-    elif user_input in ['east', 'e']:
+    elif user_input in {'north', 'n', 'in'}:
         new_location[0] += 1
-        room_described = False
-    elif user_input in ['west', 'w']:
-        new_location[0] -= 1
-        room_described = False
-    elif user_input in ['north', 'n', 'in']:
-        new_location[1] += 1
-        room_described = False
     elif user_input in ['south', 's']:
+        new_location[0] -= 1
+    elif user_input in ['east', 'e']:
+        new_location[1] += 1
+    elif user_input in ['west', 'w']:
         new_location[1] -= 1
-        room_described = False
     elif user_input == 'up':
         new_location[2] += 1
-        room_described = False
     elif user_input == 'down':
         new_location[2] -= 1
-        room_described = False
     else:
         # otherwise assume this is a verb that the user can deal with
         input_list = user_input.split()
@@ -83,12 +90,13 @@ def parse_user_input(user_input, player, world):
         return room_described
 
     if user_input in DIRECTIONS:
+        room_described = False
         new_location_id = array_to_id(new_location)
         # check we can move that direction
         if room.blocked and new_location_id not in player.visited:
             print(room.blocked_reason)
             return True
-        if new_location_id in world.world.keys():
+        if world.valid_move(new_location_id):
             player.visited.add(player.current_location())
             player.current_coordinates = new_location
         else:
