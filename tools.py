@@ -16,7 +16,7 @@ DIRECTIONS = {
 
 
 def array_to_id(array):
-    return '-'.join(str(x) for x in array)
+    return '_'.join(str(x) for x in array)
 
 
 def adventure_help():
