@@ -1,4 +1,5 @@
-# Adventure
+just testing
+	# Adventure
 
 A text adventure game featuring time travel.
 
@@ -11,9 +12,9 @@ the framework, so the actual story needs a lot of work.
 This game was written for python 3.
 
 I usually use a virtual env, like so:
-`virtualenv -p /path/to/python/bin/python3.4 .`  
-`. bin/activate`  
-Then install the requirements:  
+`virtualenv -p /path/to/python/bin/python3.4 .`
+`. bin/activate`
+Then install the requirements:
 `pip install -r requirements.txt `
 
 To play, simply run `python adventure.py`
