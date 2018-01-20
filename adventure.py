@@ -1,6 +1,7 @@
 #!/usr/bin/python
 
 import sys
+import os
 
 import yaml
 import transaction
@@ -12,7 +13,8 @@ from sprites import sprites_to_init
 from tools import parse_user_input
 
 # setup database
-storage = FileStorage.FileStorage('data.fs')
+os.makedirs('data', exist_ok=True)
+storage = FileStorage.FileStorage('data/data.fs')
 db = ZODB.DB(storage)
 connection = db.open()
 root = connection.root
