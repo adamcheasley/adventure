@@ -1,11 +1,13 @@
+import persistent
 from exc import GameOver
 from tools import array_to_id
 
 
 class World(object):
 
-    def __init__(self, adventure_map, sprites=None):
-        player = Player([1, 0, 0], self)  # [x, y, z]
+    def __init__(self, adventure_map, sprites=None, player=None):
+        if player is None:
+            player = Player([1, 0, 0], self)  # [x, y, z]
         self.player = player
         self.adventure_map = adventure_map
         self.sprites = sprites
@@ -62,7 +64,7 @@ class World(object):
             self.date = 'present'
 
 
-class Human(object):
+class Human(persistent.Persistent):
 
     def __init__(self, location=None):
         self.current_coordinates = location
