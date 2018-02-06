@@ -40,3 +40,5 @@ include/
 .DS_Store
 .cache
 *~
+
+data.fs*
