@@ -17,4 +17,13 @@ present:
     description: "The motorway continues. To the west, just off the road, you can see an upturned security van.\nIt seems to have been the only vehicle that was attempting to go back towards the city.\nThe motorway continues to the north and south."
   "2_-1_0":
     title: Motorway lay-by
-    description: a van is here
+    description: In the hedge, a van has overturned. The entire front of the vehicle is caved in. There is no way the driver could have survived.
+    room_items:
+      - title: key
+        description: A laser cut key. It looks very new.
+        use_location: [0, 2, 0]
+        when_eaten: You swallow the key. It does not taste nice.
+        death_if_eaten: true
+  "3_0_0":
+    title: Motorway
+    description: There is another exit to the west. This one appears to lead to an industrial estate. On the estate is a large, new office building. The motorway continues north.
