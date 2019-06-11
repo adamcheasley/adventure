@@ -27,7 +27,7 @@ def test_parse_map():
     world = World(world_data)
     assert isinstance(world.adventure_map, dict)
     assert 'present' in world.adventure_map
-    assert (len(world.adventure_map['present']), 2)
+    assert len(world.adventure_map['present']) == 2
 
 
 def test_room():
