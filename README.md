@@ -11,8 +11,11 @@ the framework, so the actual story needs a lot of work.
 This game was written for python 3.
 
 Get yourself a virtualenv:
-`python3 -m venv .`
-`. bin/activate`  
+```
+python3 -m venv .
+. bin/activate
+```
+
 Then install the requirements:  
 `pip install -r requirements.txt `
 
