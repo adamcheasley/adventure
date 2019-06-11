@@ -41,7 +41,7 @@ sprites = {x.sprite_id: x() for x in sprites_to_init}
 
 # initialise the map and game state
 map_file = open('new_map.yaml', 'r')
-main_map = yaml.load(map_file.read())
+main_map = yaml.safe_load(map_file.read())
 world = World(main_map, sprites=sprites, player=player)
 room = world.current_room()
 if player is None:
