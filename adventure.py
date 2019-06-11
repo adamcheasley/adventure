@@ -1,16 +1,16 @@
 #!/usr/bin/python
 
-import sys
 import os
+import sys
 
-import yaml
 import transaction
+import yaml
 import ZODB
-from ZODB import FileStorage
 from content import World
 from exc import GameOver
 from sprites import sprites_to_init
 from tools import parse_user_input
+from ZODB import FileStorage
 
 # setup database
 os.makedirs('data', exist_ok=True)
@@ -83,7 +83,7 @@ while True:
     room = world.current_room()
 
 print(exit_text)
-exit_input = input('\nWould you like to save your game?\n')
+exit_input = input('\nWould you like to save your game? [y/n]\n')
 if exit_input.strip().lower() in {'y', 'yes'}:
     transaction.commit()
 
