@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import curses
 import os
 import sys
@@ -35,6 +34,15 @@ def init_world(root, player):
     return world
 
 
+def save_game(stdscr, exit_text):
+    """Deal with saving the game."""
+    stdscr.addstr('{}\n'.format(exit_text))
+    stdscr.addstr('Would you like to save your game? [y/n]\n')
+    exit_input = stdscr.getstr().decode('utf8')
+    if exit_input.strip().lower() in {'y', 'yes'}:
+        transaction.commit()
+
+
 def main(stdscr):
     """Main game function."""
     root = init_db()
@@ -51,47 +59,41 @@ def main(stdscr):
         root.player = player
 
     curses.echo()
-    # Clear screen
     stdscr.clear()
     stdscr.addstr(f'{room.describe_location()}\n')
     stdscr.refresh()
     room_described = True
     exit_text = 'Goodbye\n'
-    #
-    # # main execution loop
-    # while True:
-    #     if not room_described:
-    #         if room.death_if_entered:
-    #             exit_text = "{}\n\n".format(room.long_description)
-    #             break
-    #         elif player.current_location() in player.visited:
-    #             print('%s\n' % room.title)
-    #         else:
-    #             print(room.describe_location())
-    #             print('\n')
-    #
-    #     try:
-    #         user_input = input('>:')
-    #     except:
-    #         break
-    #
-    #     if user_input in ['exit', 'quit', 'q']:
-    #         break
-    #     else:
-    #         try:
-    #             room_described = parse_user_input(user_input, player, world)
-    #         except GameOver:
-    #             exit_text = "You are dead."
-    #             break
-    #
-    #     room = world.current_room()
-    #
-    # print(exit_text)
-    # exit_input = input('\nWould you like to save your game? [y/n]\n')
-    # if exit_input.strip().lower() in {'y', 'yes'}:
-    #     transaction.commit()
-    #
-    # sys.exit(1)
+
+    # main execution loop
+    while True:
+        if not room_described:
+            if room.death_if_entered:
+                exit_text = "{}\n\n".format(room.long_description)
+                break
+            elif player.current_location() in player.visited:
+                stdscr.addstr('{}\n'.format(room.title))
+            else:
+                stdscr.addstr(f'{room.describe_location()}\n')
+            stdscr.refresh()
+
+        user_input = stdscr.getstr().decode('utf8')
+
+        if user_input in {'exit', 'quit', 'q'}:
+            break
+        else:
+            try:
+                room_described = parse_user_input(
+                    user_input, player, world, stdscr)
+            except GameOver:
+                exit_text = "You are dead."
+                break
+
+        room = world.current_room()
+        stdscr.refresh()
+
+    save_game(stdscr, exit_text)
+    sys.exit(1)
 
 
 curses.wrapper(main)
