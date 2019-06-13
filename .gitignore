@@ -43,3 +43,4 @@ include/
 *~
 
 data.fs*
+pyvenv.cfg
