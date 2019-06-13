@@ -1,5 +1,5 @@
 #!/usr/bin/python
-
+import curses
 import os
 import sys
 
@@ -12,79 +12,86 @@ from sprites import sprites_to_init
 from tools import parse_user_input
 from ZODB import FileStorage
 
-# setup database
-os.makedirs('data', exist_ok=True)
-storage = FileStorage.FileStorage('data/data.fs')
-db = ZODB.DB(storage)
-connection = db.open()
-root = connection.root
-try:
-    player = root.player
-except AttributeError:
-    player = None
 
-if player is None:
-    # initial scene setting
-    print("\n\n\n\nWelcome player.\n"
-          "Two days ago, you awoke in hospital to find"
-          " the world you knew had changed dramatically.\n"
-          "The small village where you once lived is now almost silent.\n"
-          "There are no cars on the roads, "
-          "no planes in the sky\n"
-          "and no people on the streets.\n"
-          "The electricity in what's left of the village is intermittent.\n"
-          "For the last two days you have "
-          "been travelling towards the city, looking for answers.\n")
+def init_db():
+    """Setup database."""
+    os.makedirs('data', exist_ok=True)
+    storage = FileStorage.FileStorage('data/data.fs')
+    db = ZODB.DB(storage)
+    connection = db.open()
+    root = connection.root
+    return root
 
-# initialise sprites
-sprites = {x.sprite_id: x() for x in sprites_to_init}
 
-# initialise the map and game state
-map_file = open('new_map.yaml', 'r')
-main_map = yaml.safe_load(map_file.read())
-world = World(main_map, sprites=sprites, player=player)
-room = world.current_room()
-if player is None:
-    player = world.player
-    # store the new player in zodb
-    root.player = player
+def init_world(root, player):
+    """Setup the world object and sprites"""
+    # initialise sprites
+    sprites = {x.sprite_id: x() for x in sprites_to_init}
 
-print(room.describe_location())
-print('\n')
-room_described = True
-exit_text = 'Goodbye\n'
+    # initialise the map and game state
+    map_file = open('new_map.yaml', 'r')
+    main_map = yaml.safe_load(map_file.read())
+    world = World(main_map, sprites=sprites, player=player)
+    return world
 
-# main execution loop
-while True:
-    if not room_described:
-        if room.death_if_entered:
-            exit_text = "{}\n\n".format(room.long_description)
-            break
-        elif player.current_location() in player.visited:
-            print('%s\n' % room.title)
-        else:
-            print(room.describe_location())
-            print('\n')
 
+def main(stdscr):
+    """Main game function."""
+    root = init_db()
     try:
-        user_input = input('>:')
-    except:
-        break
+        player = root.player
+    except AttributeError:
+        player = None
 
-    if user_input in ['exit', 'quit', 'q']:
-        break
-    else:
-        try:
-            room_described = parse_user_input(user_input, player, world)
-        except GameOver:
-            exit_text = "You are dead."
-            break
-
+    world = init_world(root, player)
     room = world.current_room()
+    if player is None:
+        player = world.player
+        # store the new player in zodb
+        root.player = player
 
-print(exit_text)
-exit_input = input('\nWould you like to save your game? [y/n]\n')
-if exit_input.strip().lower() in {'y', 'yes'}:
-    transaction.commit()
+    curses.echo()
+    # Clear screen
+    stdscr.clear()
+    stdscr.addstr(f'{room.describe_location()}\n')
+    stdscr.refresh()
+    room_described = True
+    exit_text = 'Goodbye\n'
+    #
+    # # main execution loop
+    # while True:
+    #     if not room_described:
+    #         if room.death_if_entered:
+    #             exit_text = "{}\n\n".format(room.long_description)
+    #             break
+    #         elif player.current_location() in player.visited:
+    #             print('%s\n' % room.title)
+    #         else:
+    #             print(room.describe_location())
+    #             print('\n')
+    #
+    #     try:
+    #         user_input = input('>:')
+    #     except:
+    #         break
+    #
+    #     if user_input in ['exit', 'quit', 'q']:
+    #         break
+    #     else:
+    #         try:
+    #             room_described = parse_user_input(user_input, player, world)
+    #         except GameOver:
+    #             exit_text = "You are dead."
+    #             break
+    #
+    #     room = world.current_room()
+    #
+    # print(exit_text)
+    # exit_input = input('\nWould you like to save your game? [y/n]\n')
+    # if exit_input.strip().lower() in {'y', 'yes'}:
+    #     transaction.commit()
+    #
+    # sys.exit(1)
 
-sys.exit(1)
+
+curses.wrapper(main)
