@@ -1,0 +1,23 @@
+
+present:
+  "0_0_0":
+    title: start
+    description: ''
+  "0_1_0":
+    title: North
+    description: ''
+  "0_-1_0":
+    title: South
+    description: ''
+  "-1_0_0":
+    title: West
+    description: ''
+  "1_0_0":
+    title: East
+    description: ''
+  0_0_-1:
+    title: down
+    description: ''
+  '0_0_1':
+    title: up
+    description: ''
