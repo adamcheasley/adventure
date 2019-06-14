@@ -1,4 +1,4 @@
-- If you're dead, there's no point in saving the game.
+- No need for title on every map feature.
 - Document all mapping features
 
 ## General text Adventure research
