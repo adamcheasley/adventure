@@ -2,8 +2,9 @@ import curses
 import os
 import sys
 
-import transaction
 import yaml
+
+import transaction
 import ZODB
 from content import World
 from exc import GameOver
@@ -11,9 +12,11 @@ from sprites import sprites_to_init
 from tools import parse_user_input
 from ZODB import FileStorage
 
+MAP_FILE_NAME = 'map.yaml'
+
 
 def init_db():
-    """Setup database."""
+    """Initialise database."""
     os.makedirs('data', exist_ok=True)
     storage = FileStorage.FileStorage('data/data.fs')
     db = ZODB.DB(storage)
@@ -23,12 +26,12 @@ def init_db():
 
 
 def init_world(root, player):
-    """Setup the world object and sprites"""
+    """Initialise the world object and sprites."""
     # initialise sprites
     sprites = {x.sprite_id: x() for x in sprites_to_init}
 
     # initialise the map and game state
-    map_file = open('map.yaml', 'r')
+    map_file = open(MAP_FILE_NAME, 'r')
     main_map = yaml.safe_load(map_file.read())
     world = World(main_map, sprites=sprites, player=player)
     return world
@@ -64,6 +67,8 @@ def main(stdscr):
     stdscr.refresh()
     room_described = True
     exit_text = 'Goodbye\n'
+    stdscr.scrollok(True)
+    stdscr.idlok(True)
 
     # main execution loop
     while True:
@@ -91,6 +96,10 @@ def main(stdscr):
 
         room = world.current_room()
         stdscr.refresh()
+
+        cursor_pos = curses.getsyx()
+        if cursor_pos[0] > 15:
+            stdscr.scroll(2)
 
     save_game(stdscr, exit_text)
     sys.exit(1)
