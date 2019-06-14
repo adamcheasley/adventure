@@ -5,19 +5,19 @@ past:
     title: The past
     description: This is the past
 present:
-  "0_0_0":
-    title: Back to the village
-    description: You walk back to the village and eventually succumb to the virus.
+  "0_6_-1":
+    title: Gully
+    description: You fall into a gully and die.
     death_if_entered: true
-  "1_0_0":
-    title: Deserted motorway
-    description: "You are on the motorway, about two kilometres outside of the city.\nThe lanes leading into the city are completely empty.\nThe lanes leading out are completely jammed with abandoned cars.\nThe motorway continues north. To the south is the way back to your village."
-  "2_0_0":
-    title: Deserted motorway
-    description: "The motorway continues. To the west, just off the road, you can see an upturned security van.\nIt seems to have been the only vehicle that was attempting to go back towards the city.\nThe motorway continues to the north and south."
-  "2_-1_0":
-    title: Motorway lay-by
-    description: In the hedge, a van has overturned. The entire front of the vehicle is caved in. There is no way the driver could have survived.
+  "0_6_0":
+    title: Forest
+    description: You wander further into the forest. The undergrowth is very thick here. Below you, there seems to be some kind of gully.
+  "0_5_0":
+    title: Forest
+    description: You are in a forest. It is the dead of night. You can just about see by the light of the moon. A footpath leads west.
+  "0_4_0":
+    title: Footpath
+    description: You are on an overgrown footpath. The moon above you is just about lighting the way. The path leads west.
     room_items:
       - title: key
         description: A laser cut key. It looks very new.
