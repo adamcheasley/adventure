@@ -10,7 +10,9 @@ DIRECTIONS = {
     'west',
     'w',
     'up',
+    'u',
     'down',
+    'd',
     'in',
 }
 
@@ -39,8 +41,11 @@ def adventure_help():
     """)
 
 
-def parse_user_input(user_input, player, world):
+def parse_user_input(user_input, player, world, stdscr):
     user_input = user_input.strip()
+    if not user_input:
+        return True
+
     room_described = True
     # create a copy of the current coordinates to store new
     # coordinates into
@@ -61,32 +66,32 @@ def parse_user_input(user_input, player, world):
         user_input = ' '.join(user_input.split()[1:])
 
     # http://www.quickforge.co.uk/catalog/view/theme/default/image/3D-XYZ-Graph.gif
-    # negative on x/y are flipped
+    # x, y, z
     if user_input == 'help':
-        print(adventure_help())
-    elif user_input in {'north', 'n', 'in'}:
-        new_location[0] += 1
-    elif user_input in ['south', 's']:
-        new_location[0] -= 1
-    elif user_input in ['east', 'e']:
+        stdscr.addstr(adventure_help())
+    elif user_input in {'north', 'n', 'in'}:  # +y
         new_location[1] += 1
-    elif user_input in ['west', 'w']:
+    elif user_input in {'south', 's'}:
         new_location[1] -= 1
-    elif user_input == 'up':
+    elif user_input in {'east', 'e'}:  # +x
+        new_location[0] += 1
+    elif user_input in {'west', 'w'}:
+        new_location[0] -= 1
+    elif user_input in {'up', 'u'}:
         new_location[2] += 1
-    elif user_input == 'down':
+    elif user_input in {'d', 'down'}:
         new_location[2] -= 1
     else:
         # otherwise assume this is a verb that the user can deal with
         input_list = user_input.split()
         try:
-            print(getattr(player, input_list[0])(input_list[1:], room))
+            stdscr.addstr(getattr(player, input_list[0])(input_list[1:], room))
         except AttributeError:
-            print('I do not understand.\n')
+            stdscr.addstr('I do not understand.\n')
         except TypeError:
-            print("I cannot do that.\n")
+            stdscr.addstr("I cannot do that.\n")
         except KeyError:
-            print("I cannot see that.\n")
+            stdscr.addstr("I cannot see that.\n")
         return room_described
 
     if user_input in DIRECTIONS:
@@ -94,13 +99,13 @@ def parse_user_input(user_input, player, world):
         new_location_id = array_to_id(new_location)
         # check we can move that direction
         if room.blocked and new_location_id not in player.visited:
-            print(room.blocked_reason)
+            stdscr.addstr(room.blocked_reason)
             return True
         if world.valid_move(new_location_id):
             player.visited.add(player.current_location())
             player.current_coordinates = new_location
         else:
-            print('You cannot go that way.\n')
+            stdscr.addstr('You cannot go that way.\n')
             room_described = True
 
     return room_described

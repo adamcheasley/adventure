@@ -1,0 +1,31 @@
+ # http://www.quickforge.co.uk/catalog/view/theme/default/image/3D-XYZ-Graph.gif
+
+present:
+  "0_6_-1":
+    title: Gully
+    description: You fall into a gully and die.
+    death_if_entered: true
+  "0_6_0":
+    title: Forest
+    description: You wander further into the forest. The undergrowth is very thick here. Below you, there seems to be some kind of gully.
+  "0_5_0":
+    title: Forest
+    description: 'You are in a forest. It is the dead of night. You can just about see by the light of the moon. A footpath leads south. To the east you can see the outline of what might be a house or shack.'
+  '1_5_0':
+    title: Undergrowth
+    description: You manage to push your way through the undergrowth. You can see an old, wooden shack to east.
+  '2_5_0':
+    title: Shack
+    description: You are inside the shack. It smells damp and it's hard to see.
+    room_items:
+      - title: key
+        description: A laser cut key. It looks very new.
+        use_location: [0, 2, 0]
+        when_eaten: You swallow the key. It does not taste nice.
+        death_if_eaten: true
+  "0_4_0":
+    title: Footpath
+    description: You are on an overgrown footpath. The moon above you is just about lighting the way. The path leads south.
+  "0_3_0":
+    title: path
+    description: There is another exit to the west. This one appears to lead to an industrial estate. On the estate is a large, new office building. The motorway continues north.

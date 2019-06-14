@@ -2,12 +2,15 @@ import persistent
 from exc import GameOver
 from tools import array_to_id
 
+START_POS = [0, 5, 0]  # [x, y, z]
+
 
 class World(object):
 
     def __init__(self, adventure_map, sprites=None, player=None):
+        """Init world."""
         if player is None:
-            player = Player([1, 0, 0], self)  # [x, y, z]
+            player = Player(START_POS, self)
         self.player = player
         self.adventure_map = adventure_map
         self.sprites = sprites
@@ -184,8 +187,10 @@ class Player(Human):
         return room.unblocked
 
     def eat(self, user_input, room):
-        """Attempt to eat the item. This item can either be in the inventory
-        or in the room.
+        """
+        Attempt to eat the item.
+
+        This item can either be in the inventory or in the room.
         This doesn't usually end well.
         """
         requested_item = ' '.join(user_input)
