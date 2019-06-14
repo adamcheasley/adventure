@@ -71,13 +71,11 @@ class Human(persistent.Persistent):
         self.told_back_story = False
 
     def current_location(self):
-        """Gives the current coords in form 'x-y-z'
-        """
+        """Gives the current coords in form 'x-y-z'"""
         return array_to_id(self.current_coordinates)
 
     def back_story(self):
-        """If this user has a story to tell, they do it here.
-        """
+        """If this user has a story to tell, they do it here."""
 
 
 class Player(Human):
@@ -93,9 +91,7 @@ class Player(Human):
         del room.items[title]
 
     def take(self, user_input, room):
-        """
-        a player is only allowed to hold up to 5 items
-        """
+        """Player is only allowed to hold up to 5 items."""
         if getattr(self, 'items', False) and len(self.items) == 5:
             return 'Your backpack can only hold up to 5 items'
 

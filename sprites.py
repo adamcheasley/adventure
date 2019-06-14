@@ -13,9 +13,13 @@ class BaseSprite(object):
 
 
 class ScientistOne(BaseSprite):
-    """This is the first scientist that the player meets in
+    """
+    A scientist.
+
+    This is the first scientist that the player meets in
     the laboratory building.
     """
+
     sprite_id = 'human_1'
     title = 'man'
     description = "A man, who is clearly not well..."

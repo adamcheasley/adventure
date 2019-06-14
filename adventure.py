@@ -68,7 +68,7 @@ while True:
 
     try:
         user_input = input('>:')
-    except:
+    except:  # noqa
         break
 
     if user_input in ['exit', 'quit', 'q']:
