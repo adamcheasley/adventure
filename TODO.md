@@ -1,3 +1,6 @@
+- Fix map movement
+- Document all mapping features
+
 ## General text Adventure research
 
 https://www.amc.com/shows/halt-and-catch-fire/exclusives/colossal-cave-adventure
