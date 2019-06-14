@@ -10,7 +10,9 @@ DIRECTIONS = {
     'west',
     'w',
     'up',
+    'u',
     'down',
+    'd',
     'in',
 }
 
@@ -64,20 +66,20 @@ def parse_user_input(user_input, player, world, stdscr):
         user_input = ' '.join(user_input.split()[1:])
 
     # http://www.quickforge.co.uk/catalog/view/theme/default/image/3D-XYZ-Graph.gif
-    # negative on x/y are flipped
+    # x, y, z
     if user_input == 'help':
         stdscr.addstr(adventure_help())
-    elif user_input in {'north', 'n', 'in'}:
-        new_location[0] += 1
-    elif user_input in ['south', 's']:
-        new_location[0] -= 1
-    elif user_input in ['east', 'e']:
+    elif user_input in {'north', 'n', 'in'}:  # +y
         new_location[1] += 1
-    elif user_input in ['west', 'w']:
+    elif user_input in {'south', 's'}:
         new_location[1] -= 1
-    elif user_input == 'up':
+    elif user_input in {'east', 'e'}:  # +x
+        new_location[0] += 1
+    elif user_input in {'west', 'w'}:
+        new_location[0] -= 1
+    elif user_input in {'up', 'u'}:
         new_location[2] += 1
-    elif user_input == 'down':
+    elif user_input in {'d', 'down'}:
         new_location[2] -= 1
     else:
         # otherwise assume this is a verb that the user can deal with

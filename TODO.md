@@ -1,4 +1,4 @@
-- Fix map movement
+- If you're dead, there's no point in saving the game.
 - Document all mapping features
 
 ## General text Adventure research
