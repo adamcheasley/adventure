@@ -28,7 +28,7 @@ def init_world(root, player):
     sprites = {x.sprite_id: x() for x in sprites_to_init}
 
     # initialise the map and game state
-    map_file = open('new_map.yaml', 'r')
+    map_file = open('map.yaml', 'r')
     main_map = yaml.safe_load(map_file.read())
     world = World(main_map, sprites=sprites, player=player)
     return world
