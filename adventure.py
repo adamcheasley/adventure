@@ -37,17 +37,32 @@ def init_world(root, player):
     return world
 
 
-def save_game(stdscr, exit_text):
+def save_game(stdscr, exit_text, dead):
     """Deal with saving the game."""
     stdscr.addstr('{}\n'.format(exit_text))
-    stdscr.addstr('Would you like to save your game? [y/n]\n')
-    exit_input = stdscr.getstr().decode('utf8')
-    if exit_input.strip().lower() in {'y', 'yes'}:
-        transaction.commit()
+    if not dead:
+        stdscr.addstr('Would you like to save your game? [y/n]\n')
+        exit_input = stdscr.getstr().decode('utf8')
+        if exit_input.strip().lower() in {'y', 'yes'}:
+            transaction.commit()
+    else:
+        stdscr.addstr('Game over.\n')
+        stdscr.addstr('Press any key to quit.\n')
+        stdscr.getch()
+
+
+def init_screen(stdscr, room):
+    """Initialise screen."""
+    curses.echo()
+    stdscr.clear()
+    stdscr.addstr(f'{room.describe_location()}\n')
+    stdscr.refresh()
+    stdscr.scrollok(True)
+    stdscr.idlok(True)
 
 
 def main(stdscr):
-    """Main game function."""
+    """Execute main game function."""
     root = init_db()
     try:
         player = root.player
@@ -61,20 +76,17 @@ def main(stdscr):
         # store the new player in zodb
         root.player = player
 
-    curses.echo()
-    stdscr.clear()
-    stdscr.addstr(f'{room.describe_location()}\n')
-    stdscr.refresh()
+    init_screen(stdscr, room)
     room_described = True
     exit_text = 'Goodbye\n'
-    stdscr.scrollok(True)
-    stdscr.idlok(True)
+    dead = False
 
     # main execution loop
     while True:
         if not room_described:
             if room.death_if_entered:
                 exit_text = "{}\n\n".format(room.long_description)
+                dead = True
                 break
             elif player.current_location() in player.visited:
                 stdscr.addstr('{}\n'.format(room.title))
@@ -92,6 +104,7 @@ def main(stdscr):
                     user_input, player, world, stdscr)
             except GameOver:
                 exit_text = "You are dead."
+                dead = True
                 break
 
         room = world.current_room()
@@ -101,7 +114,7 @@ def main(stdscr):
         if cursor_pos[0] > 15:
             stdscr.scroll(2)
 
-    save_game(stdscr, exit_text)
+    save_game(stdscr, exit_text, dead)
     sys.exit(1)
 
 
