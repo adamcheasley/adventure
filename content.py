@@ -191,8 +191,10 @@ class Player(Human):
         return room.unblocked
 
     def eat(self, user_input, room):
-        """Attempt to eat the item. This item can either be in the inventory
-        or in the room.
+        """
+        Attempt to eat the item.
+
+        This item can either be in the inventory or in the room.
         This doesn't usually end well.
         """
         requested_item = ' '.join(user_input)
