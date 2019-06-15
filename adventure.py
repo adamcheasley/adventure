@@ -97,7 +97,7 @@ def main(stdscr):
         stdscr.addstr('> ')
         user_input = stdscr.getstr().decode('utf8')
 
-        if user_input in {'exit', 'quit', 'q'}:
+        if user_input.strip().lower() in {'exit', 'quit', 'q'}:
             break
         else:
             try:
