@@ -51,10 +51,11 @@ def parse_user_input(user_input, player, world, stdscr):
     # coordinates into
     new_location = list(player.current_coordinates)
     room = world.current_room()
+    words = user_input.split()
 
     # remove the verb 'go' as we only care about the direction
-    if user_input.startswith('go'):
-        user_input = user_input[3:]
+    if words[0].strip().lower() in {'go', 'move', 'walk'}:
+        user_input = ' '.join(words[1:])
     elif user_input.startswith('pick up'):
         user_input = user_input.replace('pick up', 'take')
     elif user_input.startswith('pick'):
