@@ -27,5 +27,16 @@ present:
     title: Footpath
     description: You are on an overgrown footpath. The moon above you is just about lighting the way. The path leads south.
   "0_3_0":
-    title: path
-    description: There is another exit to the west. This one appears to lead to an industrial estate. On the estate is a large, new office building. The motorway continues north.
+    title: Footpath
+    description: The tall trees above you sway with the breeze. You can hear the leaves rustling. The footpath continues south. To the east is a stream.
+  '1_3_0':
+    title: Stream
+    description: You are now stood in a small, slow flowing stream. You can hear the water trickling over rocks further down. The stream flows south. There's a footpath to the west.
+  '1_2_0':
+    title: Stream
+    description: You walk further downstream. It is too overgrown and rocky to go any further.
+    room_items:
+      - title: rock
+        description: The rock is a bright orange. You can see the colour even in the dark. It is much smoother than the other rocks.
+        when_eaten: You have to really force the stone into your mouth. You can taste mud. You feel unwell.
+        death_if_eaten: true
