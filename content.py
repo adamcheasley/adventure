@@ -206,8 +206,7 @@ class Player(Human):
                 return "I cannot see a {}".format(requested_item)
 
         if found_item.death_if_eaten:
-            print(found_item.when_eaten)
-            raise GameOver()
+            raise GameOver(found_item.when_eaten)
         return found_item.when_eaten or "I can't eat that"
 
     def on(self, user_input, room):

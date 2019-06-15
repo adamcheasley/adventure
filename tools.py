@@ -1,5 +1,7 @@
 from textwrap import dedent
 
+from exc import GameOver
+
 DIRECTIONS = {
     'north',
     'n',
@@ -93,6 +95,9 @@ def parse_user_input(user_input, player, world, stdscr):
             stdscr.addstr("I cannot do that.\n")
         except KeyError:
             stdscr.addstr("I cannot see that.\n")
+        except GameOver as ex:
+            stdscr.addstr(f'{str(ex)}\n')
+            raise GameOver
         return room_described
 
     if user_input in DIRECTIONS:
