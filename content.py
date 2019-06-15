@@ -283,11 +283,8 @@ class Room(object):
         self.death_if_entered = death_if_entered
 
     def describe_location(self):
-        """
-        returns the current room and any items
-        """
-        main_description = '%s\n%s' % (self.title,
-                                       self.long_description)
+        """Describe the current room and any items."""
+        main_description = self.long_description
         # if the room is blocked, we add the blocked_description
         if self.blocked:
             main_description = '%s \n%s' % (
