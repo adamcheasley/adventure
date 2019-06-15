@@ -94,6 +94,7 @@ def main(stdscr):
                 stdscr.addstr(f'{room.describe_location()}\n')
             stdscr.refresh()
 
+        stdscr.addstr('> ')
         user_input = stdscr.getstr().decode('utf8')
 
         if user_input in {'exit', 'quit', 'q'}:
