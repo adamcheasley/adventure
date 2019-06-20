@@ -73,12 +73,16 @@ def parse_user_input(user_input, player, world, stdscr):
     if user_input == 'help':
         stdscr.addstr(adventure_help())
     elif user_input in {'north', 'n', 'in'}:  # +y
+        direction = 'n'
         new_location[1] += 1
     elif user_input in {'south', 's'}:
+        direction = 's'
         new_location[1] -= 1
     elif user_input in {'east', 'e'}:  # +x
+        direction = 'e'
         new_location[0] += 1
     elif user_input in {'west', 'w'}:
+        direction = 'w'
         new_location[0] -= 1
     elif user_input in {'up', 'u'}:
         new_location[2] += 1
@@ -110,6 +114,8 @@ def parse_user_input(user_input, player, world, stdscr):
         if world.valid_move(new_location_id):
             player.visited.add(player.current_location())
             player.current_coordinates = new_location
+        elif room.loop and direction in room.loop.split(', '):
+            return False
         else:
             stdscr.addstr('You cannot go that way.\n')
             room_described = True

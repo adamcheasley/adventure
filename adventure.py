@@ -99,21 +99,17 @@ def main(stdscr):
 
         if user_input.strip().lower() in {'exit', 'quit', 'q'}:
             break
-        else:
-            try:
-                room_described = parse_user_input(
-                    user_input, player, world, stdscr)
-            except GameOver:
-                exit_text = "You are dead."
-                dead = True
-                break
+
+        try:
+            room_described = parse_user_input(
+                user_input, player, world, stdscr)
+        except GameOver:
+            exit_text = "You are dead."
+            dead = True
+            break
 
         room = world.current_room()
         stdscr.refresh()
-
-        cursor_pos = curses.getsyx()
-        if cursor_pos[0] > 15:
-            stdscr.scroll(2)
 
     save_game(stdscr, exit_text, dead)
     sys.exit(1)

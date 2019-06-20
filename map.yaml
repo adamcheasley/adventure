@@ -8,6 +8,10 @@ present:
   "0_6_0":
     title: Forest
     description: You wander further into the forest. The undergrowth is very thick here. Below you, there seems to be some kind of gully.
+  '0_7_0':
+    title: Forest
+    description: You are moving slowly through thick undergrowth. It is hard to see which way you are going.
+    loop: n, e, w
   "0_5_0":
     title: Forest
     description: 'You are in a forest. It is the dead of night. You can just about see by the light of the moon. A footpath leads south. To the east you can see the outline of what might be a house or shack.'

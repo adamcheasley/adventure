@@ -1,4 +1,5 @@
 import persistent
+
 from exc import GameOver
 from tools import array_to_id
 
@@ -30,6 +31,7 @@ class World(object):
                                room.get('unblocked', ''),
                                room.get('blocked_description', ''),
                                room.get('death_if_entered', False),
+                               room.get('loop', None),
                                )
                 for room_item in room_items:
                     if room_item['title'] == 'time machine':
@@ -259,16 +261,14 @@ class Watch(Item):
         self.use_location = use_location
 
     def output(self):
-        """
-        shows the current date/time
-        """
+        """Show the current date/time."""
 
 
 class Room(object):
 
     def __init__(self, title, description, short_description,
                  blocked, blocked_reason, unblocked,
-                 blocked_description, death_if_entered):
+                 blocked_description, death_if_entered, loop):
         self.title = title
         self.long_description = description
         self.short_description = short_description
@@ -280,6 +280,7 @@ class Room(object):
         self.items = {}
         self.sprites = []
         self.death_if_entered = death_if_entered
+        self.loop = loop
 
     def describe_location(self):
         """Describe the current room and any items."""
