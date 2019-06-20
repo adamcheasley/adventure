@@ -137,12 +137,14 @@ class Player(Human):
             return 'You are not carrying anything.\n'
 
     def look(self, user_input, room):
-        """If user types just 'look', describe the room,
+        """Look around or at something.
+
+        If user types just 'look', describe the room,
         If not, look at what they are carrying for a match,
         or look at the objects in the room.
         """
         if not user_input:
-            return room.describe_location()
+            return f'{room.describe_location()}\n'
 
         joined_input = ' '.join(user_input).lower()
         try:
