@@ -44,3 +44,9 @@ present:
         description: The rock is a bright orange. You can see the colour even in the dark. It is much smoother than the other rocks.
         when_eaten: You have to really force the stone into your mouth. You can taste mud. You feel unwell.
         death_if_eaten: true
+  '0_2_0':
+    title: Path
+    description: You are on the footpath. To the south you can see a clearing.
+  '0_1_0':
+    title: Clearing
+    description: You enter a clearing. It looks like there have been campfires here recently. You can see the clear sky above you.
