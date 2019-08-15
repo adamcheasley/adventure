@@ -7,7 +7,6 @@ START_POS = [0, 5, 0]  # [x, y, z]
 
 
 class World(object):
-
     def __init__(self, adventure_map, sprites=None, player=None):
         """Init world."""
         if player is None:
@@ -16,44 +15,45 @@ class World(object):
         self.adventure_map = adventure_map
         self.sprites = sprites
         self.parse_map(self.adventure_map)
-        self.date = 'present'
+        self.date = "present"
 
     def parse_map(self, adventure_map):
-        self.world = {'past': {}, 'present': {}, 'future': {}}
+        self.world = {"past": {}, "present": {}, "future": {}}
         for timezone, map_details in adventure_map.items():
             for location_id, room in map_details.items():
-                room_items = room.get('room_items', [])
-                room_ob = Room(room['title'],
-                               room['description'],
-                               room.get('short_description', ''),
-                               room.get('blocked', False),
-                               room.get('blocked_reason', ''),
-                               room.get('unblocked', ''),
-                               room.get('blocked_description', ''),
-                               room.get('death_if_entered', False),
-                               room.get('loop', None),
-                               )
+                room_items = room.get("room_items", [])
+                room_ob = Room(
+                    room["title"],
+                    room["description"],
+                    room.get("short_description", ""),
+                    room.get("blocked", False),
+                    room.get("blocked_reason", ""),
+                    room.get("unblocked", ""),
+                    room.get("blocked_description", ""),
+                    room.get("death_if_entered", False),
+                    room.get("loop", None),
+                )
                 for room_item in room_items:
-                    if room_item['title'] == 'time machine':
+                    if room_item["title"] == "time machine":
                         time_machine = TimeMachine(
-                            room_item['title'],
-                            room_item.get('description', ''),
-                            room_item.get('use_location', ''))
-                        room_ob.items[room_item['title']] = time_machine
-                    elif room_item.get('sprite_id', None) is not None:
-                        sprite = self.sprites[room_item['sprite_id']]
+                            room_item["title"],
+                            room_item.get("description", ""),
+                            room_item.get("use_location", ""),
+                        )
+                        room_ob.items[room_item["title"]] = time_machine
+                    elif room_item.get("sprite_id", None) is not None:
+                        sprite = self.sprites[room_item["sprite_id"]]
                         room_ob.items[sprite.title] = sprite
                     else:
                         item = Item(
-                            room_item['title'],
-                            room_item.get('description', ''),
-                            room_item.get('use_location', ''),
-                            room_item.get('hidden', False),
-                            room_item.get('when_eaten', ''),
+                            room_item["title"],
+                            room_item.get("description", ""),
+                            room_item.get("use_location", ""),
+                            room_item.get("hidden", False),
+                            room_item.get("when_eaten", ""),
                         )
-                        item.death_if_eaten = room_item.get(
-                            'death_if_eaten', False)
-                        room_ob.items[room_item['title']] = item
+                        item.death_if_eaten = room_item.get("death_if_eaten", False)
+                        room_ob.items[room_item["title"]] = item
                 self.world[timezone][location_id] = room_ob
 
     def current_room(self):
@@ -63,14 +63,13 @@ class World(object):
         return new_location_id in self.world[self.date]
 
     def toggle_date(self):
-        if self.date == 'present':
-            self.date = 'past'
+        if self.date == "present":
+            self.date = "past"
         else:
-            self.date = 'present'
+            self.date = "present"
 
 
 class Human(persistent.Persistent):
-
     def __init__(self, location=None):
         self.current_coordinates = location
         self.told_back_story = False
@@ -84,7 +83,6 @@ class Human(persistent.Persistent):
 
 
 class Player(Human):
-
     def __init__(self, location, world):
         self.world = world
         self.current_coordinates = location
@@ -97,44 +95,44 @@ class Player(Human):
 
     def take(self, user_input, room):
         """Player is only allowed to hold up to 5 items."""
-        if getattr(self, 'items', False) and len(self.items) == 5:
-            return 'Your backpack can only hold up to 5 items'
+        if getattr(self, "items", False) and len(self.items) == 5:
+            return "Your backpack can only hold up to 5 items"
 
         if not user_input and len(room.items) > 0:
             # assume the user wants to pick up the first item in the room
             item_title = [x for x in room.items][0]
             self._add_to_items(item_title, room)
-            return 'Took %s\n' % item_title
+            return "Took %s\n" % item_title
 
         # otherwise they have asked to pick up a specific item so
         # check item is in room
         if not room.items:
             raise TypeError
-        item_title = ' '.join(user_input).lower()
+        item_title = " ".join(user_input).lower()
         self._add_to_items(item_title, room)
-        return 'Taken\n'
+        return "Taken\n"
 
     def drop(self, user_input, room):
         if not user_input:
-            return 'Drop what?\n'
+            return "Drop what?\n"
         if not self.items:
-            return 'You are not carrying anything.\n'
-        item_title = ' '.join(user_input)
+            return "You are not carrying anything.\n"
+        item_title = " ".join(user_input)
         if item_title not in self.items:
-            return 'You are not carrying a %s' % item_title
+            return "You are not carrying a %s" % item_title
 
         room.items[item_title] = self.items[item_title]
         del self.items[item_title]
-        return 'Dropped\n'
+        return "Dropped\n"
 
     def inventory(self, user_input, room):
-        if getattr(self, 'items', []):
-            s = 'You are carrying:\n'
+        if getattr(self, "items", []):
+            s = "You are carrying:\n"
             for item in self.items.values():
-                s += 'A %s\n' % item.title
+                s += "A %s\n" % item.title
             return s
         else:
-            return 'You are not carrying anything.\n'
+            return "You are not carrying anything.\n"
 
     def look(self, user_input, room):
         """Look around or at something.
@@ -144,9 +142,9 @@ class Player(Human):
         or look at the objects in the room.
         """
         if not user_input:
-            return f'{room.describe_location()}\n'
+            return f"{room.describe_location()}\n"
 
-        joined_input = ' '.join(user_input).lower()
+        joined_input = " ".join(user_input).lower()
         try:
             return self.items[joined_input].description
         except KeyError:
@@ -155,7 +153,7 @@ class Player(Human):
         try:
             item = room.items[joined_input]
         except KeyError:
-            return 'I cannot see that'
+            return "I cannot see that"
         else:
             try:
                 return item.back_story()
@@ -166,10 +164,10 @@ class Player(Human):
         # first see if we have that item
         if not user_input:
             return "Use what?\n"
-        if not getattr(self, 'items', False):
+        if not getattr(self, "items", False):
             return "You have nothing to use.\n"
 
-        requested_item = ' '.join(user_input)
+        requested_item = " ".join(user_input)
         try:
             found_item = self.items[requested_item]
         except KeyError:
@@ -179,11 +177,12 @@ class Player(Human):
 
         # check to see if that item can be used here
         use_location = found_item.use_location
-        if found_item.title == 'time machine':
+        if found_item.title == "time machine":
             self.world.toggle_date()
             print("There is a blinding light. You feel strange.")
-        elif use_location is None or array_to_id(
-                use_location) != self.current_location():
+        elif (
+            use_location is None or array_to_id(use_location) != self.current_location()
+        ):
             return "Nothing happens.\n"
 
         # perform the action
@@ -197,7 +196,7 @@ class Player(Human):
         This item can either be in the inventory or in the room.
         This doesn't usually end well.
         """
-        requested_item = ' '.join(user_input)
+        requested_item = " ".join(user_input)
         try:
             found_item = self.items[requested_item]
         except KeyError:
@@ -221,7 +220,6 @@ class Player(Human):
 
 
 class Item(object):
-
     def __init__(self, title, description, use_location, hidden, when_eaten):
         self.title = title
         self.description = description
@@ -234,7 +232,6 @@ class Item(object):
 
 
 class TimeMachine(Item):
-
     def __init__(self, title, description, use_location):
         self.title = title
         self.description = description
@@ -267,10 +264,18 @@ class Watch(Item):
 
 
 class Room(object):
-
-    def __init__(self, title, description, short_description,
-                 blocked, blocked_reason, unblocked,
-                 blocked_description, death_if_entered, loop):
+    def __init__(
+        self,
+        title,
+        description,
+        short_description,
+        blocked,
+        blocked_reason,
+        unblocked,
+        blocked_description,
+        death_if_entered,
+        loop,
+    ):
         self.title = title
         self.long_description = description
         self.short_description = short_description
@@ -289,12 +294,10 @@ class Room(object):
         main_description = self.long_description
         # if the room is blocked, we add the blocked_description
         if self.blocked:
-            main_description = '%s \n%s' % (
-                main_description,
-                self.blocked_description)
+            main_description = "%s \n%s" % (main_description, self.blocked_description)
 
         if self.items:
-            all_items = ''
+            all_items = ""
             for item in self.items.values():
                 try:
                     hidden = item.hidden
@@ -302,8 +305,7 @@ class Room(object):
                     pass
                 else:
                     if not hidden:
-                        all_items += '\nThere is a %s here.' % item.title
-            main_description = '{} {}'.format(
-                main_description, all_items)
+                        all_items += "\nThere is a %s here." % item.title
+            main_description = "{} {}".format(main_description, all_items)
 
         return main_description
