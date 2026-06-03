@@ -37,18 +37,31 @@ def init_world(root, player):
     return world
 
 
-def save_game(stdscr, exit_text, dead):
-    """Deal with saving the game."""
+def end_game(stdscr, exit_text, outcome):
+    """Show the closing text and wrap up the game.
+
+    outcome is one of:
+      "quit" - the player left mid-game, so offer to save.
+      "won"  - the player reached a winning room.
+      "dead" - the player died.
+    """
     stdscr.addstr("{}\n".format(exit_text))
-    if not dead:
+
+    if outcome == "quit":
         stdscr.addstr("Would you like to save your game? [y/n]\n")
         exit_input = stdscr.getstr().decode("utf8")
         if exit_input.strip().lower() in {"y", "yes"}:
             transaction.commit()
-    else:
+        return
+
+    if outcome == "won":
+        stdscr.addstr("\n*** YOU WIN ***\n")
+        stdscr.addstr("Thanks for playing.\n")
+    else:  # dead
         stdscr.addstr("Game over.\n")
-        stdscr.addstr("Press any key to quit.\n")
-        stdscr.getch()
+
+    stdscr.addstr("Press any key to quit.\n")
+    stdscr.getch()
 
 
 def init_screen(stdscr, room):
@@ -80,16 +93,17 @@ def main(stdscr):
     init_screen(stdscr, room)
     room_described = True
     exit_text = "Goodbye\n"
-    dead = False
+    outcome = "quit"
 
     # main execution loop
     while True:
         if not room_described:
-            if room.death_if_entered:
+            end = room.end_state()
+            if end is not None:
                 exit_text = "{}\n\n".format(room.long_description)
-                dead = True
+                outcome = end
                 break
-            elif player.current_location() in player.visited:
+            elif player.visited_key() in player.visited:
                 stdscr.addstr("{}\n".format(room.title))
             else:
                 stdscr.addstr(f"{room.describe_location()}\n")
@@ -105,13 +119,13 @@ def main(stdscr):
             room_described = parse_user_input(user_input, player, world, stdscr)
         except GameOver:
             exit_text = "You are dead."
-            dead = True
+            outcome = "dead"
             break
 
         room = world.current_room()
         stdscr.refresh()
 
-    save_game(stdscr, exit_text, dead)
+    end_game(stdscr, exit_text, outcome)
     sys.exit(0)
 
 

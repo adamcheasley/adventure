@@ -29,7 +29,7 @@ class ScientistOne(BaseSprite):
         \n"Who are you? How did you get in here?\n
 It doesn't matter. It was us, we did it. It was a virus. We couldn't stop it, it had
 mutated too much. Our medicine could not fight it yet. You have to find the machine.
-Find the machine, go back and stop this from every happening!"\n
+Find the machine, go back and stop this from ever happening!"\n
 The man coughs a few more times, then closes his eyes.
         """
         )
@@ -47,9 +47,17 @@ class ComputerOne(BaseSprite, Item):
     )
 
     def on(self):
-        return (
-            "The screen flickers a bit. Then"
-            " goes dark. I think it's not going to work."
+        return dedent(
+            """\
+        The monitor stutters to life. A single log entry glows on the screen:
+
+          > PROJECT CHRONOS - STATUS: CRITICAL
+          > Containment breach in the sub-level lab. Pathogen P-0 is loose.
+          > The relocation device ("the machine") is still intact below.
+          > If anyone is left to read this: go down, go back, stop the breach.
+
+        The screen flickers, then goes dark.
+        """
         )
 
 

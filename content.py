@@ -5,6 +5,9 @@ from tools import array_to_id
 
 START_POS = [0, 5, 0]  # [x, y, z]
 
+# the order the time machine cycles through when used
+TIMEZONE_ORDER = ("present", "past", "future")
+
 
 class World(object):
     def __init__(self, adventure_map, sprites=None, player=None):
@@ -32,9 +35,10 @@ class World(object):
                     room.get("blocked_description", ""),
                     room.get("death_if_entered", False),
                     room.get("loop", None),
+                    room.get("win_if_entered", False),
                 )
                 for room_item in room_items:
-                    if room_item["title"] == "time machine":
+                    if room_item.get("title") == "time machine":
                         time_machine = TimeMachine(
                             room_item["title"],
                             room_item.get("description", ""),
@@ -63,10 +67,21 @@ class World(object):
         return new_location_id in self.world[self.date]
 
     def toggle_date(self):
-        if self.date == "present":
-            self.date = "past"
-        else:
-            self.date = "present"
+        """Travel to the next time the player can exist in.
+
+        Advances through TIMEZONE_ORDER (present -> past -> future -> present)
+        to the next timezone that has a room at the player's current location,
+        so the player never lands in empty space. Returns True if travel
+        happened, False if there is nowhere to arrive (and date is unchanged).
+        """
+        location = self.player.current_location()
+        start = TIMEZONE_ORDER.index(self.date)
+        for offset in range(1, len(TIMEZONE_ORDER)):
+            candidate = TIMEZONE_ORDER[(start + offset) % len(TIMEZONE_ORDER)]
+            if location in self.world[candidate]:
+                self.date = candidate
+                return True
+        return False
 
 
 class Human(persistent.Persistent):
@@ -91,6 +106,18 @@ class Player(Human):
         self.current_coordinates = location
         self.visited = set()
         self.items = {}
+
+    def visited_key(self, location_id=None):
+        """A visited marker that is unique per timezone.
+
+        The same coordinate exists in more than one time, so `visited` has to
+        be keyed by time too - otherwise stepping into a room you only saw in
+        another time would count as a re-visit and its description be skipped.
+        """
+        if location_id is None:
+            location_id = self.current_location()
+        date = getattr(self.world, "date", "present")
+        return "{}:{}".format(date, location_id)
 
     def _add_to_items(self, title, room):
         self.items[title] = room.items[title]
@@ -179,10 +206,15 @@ class Player(Human):
         except KeyError:
             return "You don't have a %s" % requested_item
 
-        # the time machine is reusable and works anywhere; it is not consumed
+        # the time machine is reusable and is not consumed. It only works
+        # where the player can also exist in another time.
         if found_item.title == "time machine":
-            self.world.toggle_date()
-            return "There is a blinding light. You feel strange.\n"
+            if not self.world.toggle_date():
+                return "The machine hums, then falls silent. Nothing happens here.\n"
+            new_room = self.world.current_room()
+            return "There is a blinding light. You feel strange.\n\n{}\n".format(
+                new_room.describe_location()
+            )
 
         # otherwise the item only does something at its use_location. If it
         # can't be used here, leave it in the inventory rather than wasting it.
@@ -289,6 +321,7 @@ class Room(object):
         blocked_description,
         death_if_entered,
         loop,
+        win_if_entered=False,
     ):
         self.title = title
         self.long_description = description
@@ -302,6 +335,20 @@ class Room(object):
         self.sprites = []
         self.death_if_entered = death_if_entered
         self.loop = loop
+        # entering this room wins the game
+        self.win_if_entered = win_if_entered
+
+    def end_state(self):
+        """Return the game-ending outcome for entering this room.
+
+        "dead" if the room is fatal, "won" if it is a winning room, or None
+        if entering it just continues play.
+        """
+        if self.death_if_entered:
+            return "dead"
+        if self.win_if_entered:
+            return "won"
+        return None
 
     def describe_location(self):
         """Describe the current room and any items.

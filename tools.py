@@ -135,11 +135,11 @@ def parse_user_input(user_input, player, world, stdscr):
         room_described = False
         new_location_id = array_to_id(new_location)
         # check we can move that direction
-        if room.blocked and new_location_id not in player.visited:
+        if room.blocked and player.visited_key(new_location_id) not in player.visited:
             stdscr.addstr(room.blocked_reason)
             return True
         if world.valid_move(new_location_id):
-            player.visited.add(player.current_location())
+            player.visited.add(player.visited_key())
             player.current_coordinates = new_location
         elif room.loop and direction in room.loop.split(", "):
             return False

@@ -1,52 +1,230 @@
- # http://www.quickforge.co.uk/catalog/view/theme/default/image/3D-XYZ-Graph.gif
+# Adventure world map.
+#
+# Coordinates are "x_y_z" strings. Movement maps to axes as:
+#   north / in -> +y    south -> -y
+#   east       -> +x    west  -> -x
+#   up         -> +z    down  -> -z
+#
+# There are three time dimensions. The time machine cycles the player through
+# them in place: present -> past -> future -> present. A room must exist at the
+# player's coordinate in the destination time, or nothing happens.
+#
+# This is a small, self-contained game that touches every mechanic:
+#   navigation, a death room, a looping maze, a blocked door unlocked with an
+#   item, edible items (fatal and harmless), a hidden item, a talking sprite,
+#   a switch-on-able computer, and time travel across all three times.
+#
+# See README.md for the full field reference.
 
+# ---------------------------------------------------------------------------
+# PRESENT - the world after the catastrophe. You wake in a dark forest and
+# make your way to an abandoned research facility.
+# ---------------------------------------------------------------------------
 present:
-  "0_6_-1":
-    title: Gully
-    description: You fall into a gully and die.
-    death_if_entered: true
-  "0_6_0":
-    title: Forest
-    description: You wander further into the forest. The undergrowth is very thick here. Below you, there seems to be some kind of gully.
-  '0_7_0':
-    title: Forest
-    description: You are moving slowly through thick undergrowth. It is hard to see which way you are going.
-    loop: n, e, w
+
+  # --- The forest where you wake (start) ---
   "0_5_0":
     title: Forest
-    description: 'You are in a forest. It is the dead of night. You can just about see by the light of the moon. A footpath leads south. To the east you can see the outline of what might be a house or shack.'
-  '1_5_0':
+    description: >-
+      You are in a forest. It is the dead of night. You can just about see by
+      the light of the moon. A footpath leads south. To the east the
+      undergrowth thins toward the outline of a shack.
+
+  "0_6_0":
+    title: Forest
+    description: >-
+      You wander further into the forest. The undergrowth is thick here. The
+      way back is south. Below you, the ground falls away into a black gully.
+
+  "0_6_-1":
+    title: Gully
+    description: >-
+      You step out over the edge and fall into the gully. The drop is further
+      than it looked.
+    death_if_entered: true
+
+  "0_7_0":
+    title: Forest
+    description: >-
+      You are deep in tangled undergrowth. Every direction looks the same and
+      the trees seem to close in behind you. Only the way south feels solid.
+    loop: "n, e, w"
+
+  # --- East toward the shack (the key) ---
+  "1_5_0":
     title: Undergrowth
-    description: You manage to push your way through the undergrowth. You can see an old, wooden shack to east.
-  '2_5_0':
+    description: >-
+      You push through the undergrowth. An old wooden shack stands just to the
+      east. The forest is back to the west.
+
+  "2_5_0":
     title: Shack
-    description: You are inside the shack. It smells damp and it's hard to see.
+    description: >-
+      You are inside the shack. It smells of damp and rot, and it is hard to
+      see. The only way out is west.
     room_items:
       - title: key
-        description: A laser cut key. It looks very new.
-        use_location: [0, 2, 0]
-        when_eaten: You swallow the key. It does not taste nice.
+        description: A laser-cut key, oddly new and clean for this place.
+        use_location: [0, 1, 0]
+        when_eaten: You try to swallow the key. It lodges in your throat.
         death_if_eaten: true
+
+  # --- South: the footpath down to the facility ---
   "0_4_0":
     title: Footpath
-    description: You are on an overgrown footpath. The moon above you is just about lighting the way. The path leads south.
+    description: >-
+      You are on an overgrown footpath. The moon lights the way just enough.
+      The path runs north and south.
+
   "0_3_0":
     title: Footpath
-    description: The tall trees above you sway with the breeze. You can hear the leaves rustling. The footpath continues south. To the east is a stream.
-  '1_3_0':
+    description: >-
+      Tall trees sway overhead and leaves rustle. The footpath continues
+      south. To the east a stream glints in the dark.
+
+  "1_3_0":
     title: Stream
-    description: You are now stood in a small, slow flowing stream. You can hear the water trickling over rocks further down. The stream flows south. There's a footpath to the west.
-  '1_2_0':
+    description: >-
+      You stand in a shallow, slow stream. Water trickles over rocks further
+      down. A footpath lies west; the stream runs south.
+
+  "1_2_0":
     title: Stream
-    description: You walk further downstream. It is too overgrown and rocky to go any further.
+    description: >-
+      You wade downstream until it grows too rocky to go on. The only way back
+      is north.
     room_items:
       - title: rock
-        description: The rock is a bright orange. You can see the colour even in the dark. It is much smoother than the other rocks.
-        when_eaten: You have to really force the stone into your mouth. You can taste mud. You feel unwell.
+        description: >-
+          A bright orange rock, smooth and strangely vivid even in the dark.
+        when_eaten: >-
+          You force the stone into your mouth. It tastes of bitter mud, and
+          then of nothing at all.
         death_if_eaten: true
-  '0_2_0':
+
+  "0_2_0":
     title: Path
-    description: You are on the footpath. To the south you can see a clearing.
-  '0_1_0':
+    description: >-
+      You are back on the footpath. To the south the trees give way to a
+      clearing.
+
+  # --- The clearing: a locked facility door (blocked until you USE the key) ---
+  "0_1_0":
     title: Clearing
-    description: You enter a clearing. It looks like there have been campfires here recently. You can see the clear sky above you.
+    description: >-
+      You step into a clearing scarred with old campfires. To the south,
+      half-sunk into the hillside, squats a windowless concrete bunker. A heavy
+      steel door is set into its face.
+    blocked: true
+    blocked_reason: "The steel door is locked fast. It will not budge.\n"
+    blocked_description: A keypad beside the door blinks red. It needs a key.
+    unblocked: "You slot the key home. The lock thunks back and the door yawns open.\n"
+
+  # --- Inside the facility ---
+  "0_0_0":
+    title: Foyer
+    description: >-
+      A bare concrete foyer lit by a single flickering strip light. A stairwell
+      climbs up to an office; a steel ladder drops down into a sub-level
+      laboratory. The door north leads back out to the clearing.
+
+  "0_0_1":
+    title: Office
+    description: >-
+      A cramped office, papers strewn everywhere as if abandoned in a hurry.
+      The only way out is back down.
+    room_items:
+      - sprite_id: computer_1
+      - title: ration bar
+        description: A foil-wrapped emergency ration bar, somehow still sealed.
+        when_eaten: >-
+          You tear it open and force down the chalky bar. It is vile, but your
+          head feels a little clearer.
+
+  "0_0_-1":
+    title: Laboratory
+    description: >-
+      The sub-level laboratory is cold and silent, its walls lined with dead
+      equipment. A man in a torn lab coat lies slumped against the far wall,
+      his breathing shallow. Against the opposite wall stands a bulky, humming
+      device - a time machine - its dials still glowing faintly. A desk drawer
+      hangs open, a battered logbook wedged inside. The ladder leads back up.
+    room_items:
+      - sprite_id: human_1
+      - title: time machine
+        description: >-
+          A heavy console of dials and cabling. It thrums with a power nothing
+          else here has. There are no controls you understand - only a single
+          worn lever.
+        use_location: [0, 0, -1]
+      - title: logbook
+        description: >-
+          The last entry reads: "Containment failed. P-0 is loose. If the
+          machine still works, someone must go back to the day it began and
+          stop the breach. It is our only chance."
+        hidden: true
+
+# ---------------------------------------------------------------------------
+# PAST - the facility on the day it all began, bright and still intact.
+# Reached by using the time machine in the laboratory.
+# ---------------------------------------------------------------------------
+past:
+
+  "0_0_-1":
+    title: Laboratory
+    description: >-
+      The laboratory hums with power and you should not be here. For the
+      moment it is empty, an experiment left mid-run. On a workbench, clamped
+      in a steel cradle, something waits behind sealed glass. This is where it
+      begins. A ladder leads up.
+    room_items:
+      - title: vial
+        description: >-
+          A sealed containment vial labelled "P-0". Even now you can feel it is
+          the source of everything that went wrong. Removing it would change
+          all of this.
+        when_eaten: You would have to be insane to put this anywhere near your mouth.
+        death_if_eaten: true
+
+  "0_0_0":
+    title: Foyer
+    description: >-
+      The foyer is clean and brightly lit, alive with the hum of fluorescent
+      light. Through a window you glimpse staff moving in another wing. A
+      ladder drops to the lab below; a door opens north onto the grounds.
+
+  "0_1_0":
+    title: Grounds
+    description: >-
+      Outside it is a crisp, ordinary morning. The forest beyond the fence is
+      green and alive, birds wheeling overhead. It is hard to believe this is
+      the same place you woke in. A door leads south, back inside.
+
+# ---------------------------------------------------------------------------
+# FUTURE - the world that exists because you went back. Reached by using the
+# time machine again. This is the ending.
+# ---------------------------------------------------------------------------
+future:
+
+  "0_0_-1":
+    title: Laboratory
+    description: >-
+      The laboratory is spotless and quietly busy. The cradle on the workbench
+      stands empty - there is no vial here, and the records say there never
+      was. Whatever you did, it held. A ladder leads up.
+
+  "0_0_0":
+    title: Foyer
+    description: >-
+      A sunlit foyer, plants in the corners, voices and laughter somewhere down
+      the corridor. This is a place of research again, not a tomb. A ladder
+      leads down; a door opens north.
+
+  "0_1_0":
+    title: Grounds
+    description: >-
+      You step out into a bright new morning. The forest runs green to the
+      horizon and a town glitters in the valley beyond. Children are playing
+      somewhere close by. The world you woke in never happened - because of
+      you.
+    win_if_entered: true

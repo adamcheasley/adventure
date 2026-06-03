@@ -1,7 +1,7 @@
 import pytest
 import yaml
 
-from content import Item, Player, Room, World
+from content import Item, Player, Room, TimeMachine, World
 from sprites import sprites_to_init
 from exc import GameOver
 from tools import parse_user_input
@@ -177,6 +177,29 @@ def test_eat_poison_raises_game_over():
         player.eat(["rock"], room)
 
 
+def test_room_end_state():
+    assert make_room().end_state() is None
+    assert make_room(death_if_entered=True).end_state() == "dead"
+    assert make_room(win_if_entered=True).end_state() == "won"
+
+
+def test_map_parses_win_room():
+    """win_if_entered round-trips from the map into the Room."""
+    rooms = {
+        "present": {
+            "0_0_0": {"title": "Start", "description": "x"},
+            "0_1_0": {
+                "title": "Finish",
+                "description": "you made it",
+                "win_if_entered": True,
+            },
+        }
+    }
+    world = World(rooms)
+    assert world.world["present"]["0_0_0"].end_state() is None
+    assert world.world["present"]["0_1_0"].end_state() == "won"
+
+
 def test_real_map_loads():
     """Smoke test: the shipped map.yaml builds a World without errors.
 
@@ -189,6 +212,98 @@ def test_real_map_loads():
     world = World(adventure_map, sprites=sprites)
     # the player starts in a room that actually exists
     assert world.current_room() is not None
+    # all three times are populated and share the lab coordinate, so the time
+    # machine always has somewhere to land
+    for timezone in ("present", "past", "future"):
+        assert world.world[timezone], "%s has no rooms" % timezone
+        assert "0_0_-1" in world.world[timezone]
+    # the game is winnable: the future has a winning room
+    win_rooms = [r for r in world.world["future"].values() if r.end_state() == "won"]
+    assert win_rooms, "no winning room in the future"
+
+
+def make_time_world():
+    """A world with the same coordinate in every time."""
+    rooms = {
+        "present": {"0_0_0": {"title": "Now", "description": "the present"}},
+        "past": {"0_0_0": {"title": "Then", "description": "the past"}},
+        "future": {"0_0_0": {"title": "Later", "description": "the future"}},
+    }
+    return World(rooms)
+
+
+def test_time_machine_cycles_timezones():
+    world = make_time_world()
+    world.player.current_coordinates = [0, 0, 0]
+    world.player.items["time machine"] = TimeMachine("time machine", "a device", "")
+
+    assert world.date == "present"
+    world.player.use(["time", "machine"], world.current_room())
+    assert world.date == "past"
+    world.player.use(["time", "machine"], world.current_room())
+    assert world.date == "future"
+    world.player.use(["time", "machine"], world.current_room())
+    assert world.date == "present"
+
+
+def test_time_machine_no_counterpart_stays_put():
+    """Using the machine where no other time has a room does nothing."""
+    rooms = {
+        "present": {
+            "0_0_0": {"title": "Now", "description": "here"},
+            "1_0_0": {"title": "Edge", "description": "only in the present"},
+        },
+        "past": {"0_0_0": {"title": "Then", "description": "there"}},
+    }
+    world = World(rooms)
+    world.player.current_coordinates = [1, 0, 0]  # exists only in the present
+    world.player.items["time machine"] = TimeMachine("time machine", "a device", "")
+
+    result = world.player.use(["time", "machine"], world.current_room())
+    assert world.date == "present"
+    assert "Nothing happens" in result
+
+
+def test_visited_key_distinguishes_timezones():
+    world = make_time_world()
+    player = world.player
+    player.current_coordinates = [0, 0, 0]
+    assert player.visited_key() == "present:0_0_0"
+    world.date = "future"
+    assert player.visited_key() == "future:0_0_0"
+
+
+def test_blocked_room_blocks_then_unblocks():
+    """A blocked room can't be left into new territory until an item is used."""
+    rooms = {
+        "present": {
+            "0_5_0": {  # the player starts here (START_POS)
+                "title": "Gate",
+                "description": "A locked gate.",
+                "blocked": True,
+                "blocked_reason": "The gate is locked.\n",
+                "unblocked": "The gate opens.\n",
+                "room_items": [
+                    {"title": "key", "description": "a key", "use_location": [0, 5, 0]}
+                ],
+            },
+            "0_6_0": {"title": "Beyond", "description": "past the gate"},
+        }
+    }
+    world = World(rooms)
+    player = world.player
+
+    # blocked: moving north into the unvisited room is refused
+    screen = FakeScreen()
+    parse_user_input("north", player, world, screen)
+    assert "locked" in screen.buf.lower()
+    assert player.current_location() == "0_5_0"
+
+    # take and use the key, then the way opens
+    parse_user_input("take key", player, world, FakeScreen())
+    parse_user_input("use key", player, world, FakeScreen())
+    parse_user_input("north", player, world, FakeScreen())
+    assert player.current_location() == "0_6_0"
 
 
 def test_dispatch_take_synonym():
