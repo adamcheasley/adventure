@@ -14,13 +14,9 @@ notes are preserved under [Design notes](#design-notes).
       machine is reusable and no longer consumed.
 - [x] **`eat()` never removes the eaten item.** `Player.eat` now removes the
       item from inventory/room when it's actually eaten.
-- [ ] **Time travel crashes the game.** Using the time machine calls
-      `world.toggle_date()` → `"past"`, but `parse_map` only ever populates
-      the timezone(s) present in the map and `map.yaml` has no `past`/`future`
-      rooms. `current_room()` then returns `None` and the main loop crashes on
-      `room.death_if_entered`. Guard against a `None` room and/or seed the
-      other timezones. (Currently unreachable in play — no time machine exists
-      in `map.yaml` — but still a latent crash. See Engine: time-travel model.)
+- [x] **Time travel crashes the game.** `toggle_date` now only travels to a
+      time that actually has a room at the player's coordinate (and `map.yaml`
+      seeds all three times), so the player can never land on a `None` room.
 - [x] **`print()` inside curses.** The only `print(...)` (time-machine branch
       of `Player.use`) is gone; it now returns the message so the parser writes
       it via `stdscr`.
@@ -38,12 +34,26 @@ notes are preserved under [Design notes](#design-notes).
 - [ ] **Centralise the parser.** Movement is a long if/elif chain mixed with
       verb dispatch. Split into: normalise input → resolve verb/synonym →
       resolve direction → dispatch. Makes new commands and tests far easier.
-- [ ] **Make `current_room()` total.** Returning `None` should never crash the
-      loop; handle missing rooms explicitly (especially across timezones).
-- [ ] **Finish the time-travel model.** `toggle_date` only flips
-      present↔past and ignores `future`; `TimeMachine.set_time/travel/output`
-      and the `Watch` class are empty stubs. Decide the model (see design
-      notes) and implement it.
+- [ ] **Make `current_room()` total.** The time-travel path can no longer
+      land on a `None` room, but `current_room()` could still return `None`
+      for a malformed map; handle it explicitly rather than crashing the loop.
+- [~] **Finish the time-travel model.** `toggle_date` now cycles
+      present→past→future→present and only lands where a room exists. Still
+      stubs: `TimeMachine.set_time/travel/output` and the whole `Watch` class
+      (never instantiated — a watch in the map is just a plain `Item`).
+- [x] **Win / ending state.** Added a `win_if_entered` room flag and a
+      `Room.end_state()` ("won"/"dead"/None). The main loop now ends with a
+      "*** YOU WIN ***" banner (no save prompt) when the player reaches the
+      future Grounds. Covered by tests.
+- [ ] **Futures are static.** The `future` rooms describe success
+      unconditionally; nothing tracks whether the player actually changed the
+      past. Needs cross-time state (e.g. "did the player remove the vial?").
+- [ ] **Sprites are takeable.** `take` will happily move a sprite (the man,
+      the computer) into the inventory. Mark sprites as non-takeable.
+- [ ] **Case-sensitive item names.** `take`/`look` lower-case the input but
+      `use`/`eat` don't, so `use Time Machine` fails. Normalise consistently.
+- [ ] **`short_description` is dead.** Parsed into `Room` but never shown.
+      Wire it up or drop it.
 - [ ] **Player state init is inconsistent.** `Player.__init__` overrides
       `Human.__init__` without calling `super()`, so `told_back_story` is never
       set and `Human.back_story` is dead code. Reconcile the Human/Player
@@ -56,34 +66,36 @@ notes are preserved under [Design notes](#design-notes).
 - [ ] **Save/load.** Only a single implicit ZODB autosave-on-exit exists. Add
       explicit save/load (named slots or at least load-or-new on startup) and a
       `data/` reset path. Confirm `data.fs*` stays git-ignored (it is).
+- [ ] **Commands** allow more involved, human-like commands, e.g. "go down the ladder"
 - [x] **Resource handling.** `init_world` now opens `map.yaml` with a `with`
       block.
 
 ## Content & data
 
-- [ ] **Nothing in the map uses the engine's features.** `map.yaml` has no
-      `blocked` rooms, no `room_items` with `sprite_id`, and no `time machine`
-      item, so sprites (`ScientistOne`, `ComputerOne`), blocking/unblocking, and
-      time travel are all unreachable. Build out a small playable slice that
-      actually exercises them.
-- [ ] **Add `past` (and maybe `future`) rooms** so the time machine has a
-      destination.
-- [ ] **Place the time machine** somewhere obtainable; wire the `Watch` item.
-- [ ] **Document every map field.** README lists the schema but
-      `short_description`, `loop`, `death_if_entered`, `when_eaten`,
-      `death_if_eaten`, `hidden`, `sprite_id` are undocumented. (Carried over
-      from the original TODO: "Document all mapping features".)
+- [x] **The map now exercises every engine feature.** `map.yaml` is a small
+      complete playthrough: forest → facility → lab, with a blocked door (key +
+      `use`), a death room (gully), a `loop` maze, fatal and edible items, a
+      hidden logbook, the scientist sprite (`back_story`), the computer sprite
+      (`on`), and the time machine across all three times. See README for the
+      walkthrough shape.
+- [x] **Added `past` and `future` rooms** sharing the lab coordinate so the
+      time machine has somewhere to land.
+- [x] **Placed the time machine** in the present lab (takeable, then `use`).
+      The `Watch` item is still unwired (see time-travel model above).
+- [x] **Documented every map field** in the README (timezones, axis mapping,
+      room fields table, the three `room_items` kinds).
 - [ ] **Make `title` optional per the original note** ("No need for title on
       every map feature") or default it sensibly.
 
 ## Tests
 
-- [ ] **Grow the suite beyond 2 tests.** Now at 15, covering take (presence +
+- [ ] **Grow the suite beyond 2 tests.** Now at 21, covering take (presence +
       limit), use (right vs wrong location), eat (death + non-death), a map
-      smoke test, and command dispatch (synonyms, unknown/internal verbs,
-      GameOver propagation, look-at-item). Still to cover: movement
-      (directions, `loop` mazes, `blocked` rooms), drop, look with no args,
-      looking at a sprite, room unblocking in context, and time travel.
+      smoke test + timezone/win invariants, command dispatch (synonyms,
+      unknown/internal verbs, GameOver propagation, look-at-item), the
+      blocked-room flow, time-travel cycling + "nothing happens", time-aware
+      `visited`, and the win/death end-state. Still to cover: `loop` mazes,
+      the gully death room, drop, and looking at a sprite.
 - [ ] **Adopt pytest discovery conventions.** Rename `tests.py` → `test_*.py`
       (or a `tests/` package) so `pytest` finds it by default.
 - [x] **Add a smoke test** that loads `map.yaml` and constructs the `World`,
@@ -103,12 +115,6 @@ notes are preserved under [Design notes](#design-notes).
       `.venv/`) instead of at the project root, which scatters `bin/ lib/
       include/` into the working tree.
 
-## Web frontend
-
-- [ ] **The `web/` frontend is a disconnected stub.** `index.html` + `main.js`
-      just echo input; there's no bridge to the Python game. Either wire it to a
-      backend (e.g. expose the engine over a small API/websocket) or drop it
-      until the engine is ready.
 
 ---
 
