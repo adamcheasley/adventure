@@ -31,8 +31,8 @@ def init_world(root, player):
     sprites = {x.sprite_id: x() for x in sprites_to_init}
 
     # initialise the map and game state
-    map_file = open(MAP_FILE_NAME, "r")
-    main_map = yaml.safe_load(map_file.read())
+    with open(MAP_FILE_NAME, "r") as map_file:
+        main_map = yaml.safe_load(map_file.read())
     world = World(main_map, sprites=sprites, player=player)
     return world
 
@@ -112,7 +112,7 @@ def main(stdscr):
         stdscr.refresh()
 
     save_game(stdscr, exit_text, dead)
-    sys.exit(1)
+    sys.exit(0)
 
 
 curses.wrapper(main)

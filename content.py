@@ -83,6 +83,9 @@ class Human(persistent.Persistent):
 
 
 class Player(Human):
+    # the player's backpack can only hold this many items
+    MAX_ITEMS = 5
+
     def __init__(self, location, world):
         self.world = world
         self.current_coordinates = location
@@ -94,21 +97,24 @@ class Player(Human):
         del room.items[title]
 
     def take(self, user_input, room):
-        """Player is only allowed to hold up to 5 items."""
-        if getattr(self, "items", False) and len(self.items) == 5:
-            return "Your backpack can only hold up to 5 items"
+        """Player is only allowed to hold up to MAX_ITEMS items."""
+        if getattr(self, "items", False) and len(self.items) == self.MAX_ITEMS:
+            return "Your backpack can only hold up to %d items\n" % self.MAX_ITEMS
 
-        if not user_input and len(room.items) > 0:
+        if not room.items:
+            return "There is nothing here to take.\n"
+
+        if not user_input:
             # assume the user wants to pick up the first item in the room
-            item_title = [x for x in room.items][0]
+            item_title = next(iter(room.items))
             self._add_to_items(item_title, room)
             return "Took %s\n" % item_title
 
-        # otherwise they have asked to pick up a specific item so
-        # check item is in room
-        if not room.items:
-            raise TypeError
+        # otherwise they have asked to pick up a specific item, so
+        # check that the item is actually in the room
         item_title = " ".join(user_input).lower()
+        if item_title not in room.items:
+            return "I cannot see a %s here.\n" % item_title
         self._add_to_items(item_title, room)
         return "Taken\n"
 
@@ -172,20 +178,20 @@ class Player(Human):
             found_item = self.items[requested_item]
         except KeyError:
             return "You don't have a %s" % requested_item
-        else:
-            del self.items[requested_item]
 
-        # check to see if that item can be used here
-        use_location = found_item.use_location
+        # the time machine is reusable and works anywhere; it is not consumed
         if found_item.title == "time machine":
             self.world.toggle_date()
-            print("There is a blinding light. You feel strange.")
-        elif (
-            use_location is None or array_to_id(use_location) != self.current_location()
-        ):
+            return "There is a blinding light. You feel strange.\n"
+
+        # otherwise the item only does something at its use_location. If it
+        # can't be used here, leave it in the inventory rather than wasting it.
+        use_location = found_item.use_location
+        if use_location is None or array_to_id(use_location) != self.current_location():
             return "Nothing happens.\n"
 
-        # perform the action
+        # the item is consumed and the action is performed
+        del self.items[requested_item]
         room.blocked = False
         return room.unblocked
 
@@ -197,22 +203,28 @@ class Player(Human):
         This doesn't usually end well.
         """
         requested_item = " ".join(user_input)
-        try:
-            found_item = self.items[requested_item]
-        except KeyError:
-            found_item = None
+        if requested_item in self.items:
+            container = self.items
+        elif requested_item in room.items:
+            container = room.items
+        else:
+            return "I cannot see a {}".format(requested_item)
 
-        if found_item is None:
-            try:
-                found_item = room.items[requested_item]
-            except KeyError:
-                return "I cannot see a {}".format(requested_item)
-
-        if found_item.death_if_eaten:
+        found_item = container[requested_item]
+        if getattr(found_item, "death_if_eaten", False):
             raise GameOver(found_item.when_eaten)
-        return found_item.when_eaten or "I can't eat that"
+
+        when_eaten = getattr(found_item, "when_eaten", "")
+        if not when_eaten:
+            return "I can't eat that"
+
+        # the item is actually eaten, so remove it from wherever it was
+        del container[requested_item]
+        return when_eaten
 
     def on(self, user_input, room):
+        if not user_input:
+            return "Turn on what?\n"
         try:
             return room.items[user_input[0]].on()
         except AttributeError:
@@ -226,6 +238,8 @@ class Item(object):
         self.use_location = use_location
         self.hidden = hidden
         self.when_eaten = when_eaten
+        # may be overridden by the map loader for poisonous items
+        self.death_if_eaten = False
 
     def __repr__(self):
         return "<Item: {}>".format(self.title)
@@ -290,8 +304,12 @@ class Room(object):
         self.loop = loop
 
     def describe_location(self):
-        """Describe the current room and any items."""
-        main_description = self.long_description
+        """Describe the current room and any items.
+
+        Shown on first entry (and on "look"): the room title followed by the
+        full description. On re-entry the main loop shows just the title.
+        """
+        main_description = "{}\n{}".format(self.title, self.long_description)
         # if the room is blocked, we add the blocked_description
         if self.blocked:
             main_description = "%s \n%s" % (main_description, self.blocked_description)

@@ -18,6 +18,27 @@ DIRECTIONS = {
     "in",
 }
 
+# Verbs the player may type, mapped to the Player method that handles them.
+# Dispatch is restricted to this whitelist so a player cannot invoke arbitrary
+# attributes/methods on the player object (e.g. "_add_to_items", "visited").
+VERB_SYNONYMS = {
+    "take": "take",
+    "get": "take",
+    "grab": "take",
+    "drop": "drop",
+    "leave": "drop",
+    "inventory": "inventory",
+    "inv": "inventory",
+    "i": "inventory",
+    "look": "look",
+    "examine": "look",
+    "inspect": "look",
+    "x": "look",
+    "use": "use",
+    "eat": "eat",
+    "on": "on",
+}
+
 
 def array_to_id(array):
     return "_".join(str(x) for x in array)
@@ -57,16 +78,16 @@ def parse_user_input(user_input, player, world, stdscr):
     room = world.current_room()
     words = user_input.split()
 
-    # remove the verb 'go' as we only care about the direction
+    # normalise multi-word verb phrases down to a single leading verb
     if words[0].strip().lower() in {"go", "move", "walk"}:
+        # drop the movement verb; we only care about the direction
         user_input = " ".join(words[1:])
-    elif user_input.startswith("pick up"):
-        user_input = user_input.replace("pick up", "take")
-    elif user_input.startswith("pick"):
-        user_input = user_input.replace("pick", "take")
-    elif user_input.startswith("walk"):
-        user_input = user_input[3:]
-    elif user_input.startswith("turn on") or user_input.startswith("switch on"):
+    elif user_input.startswith("pick up "):
+        user_input = user_input.replace("pick up ", "take ", 1)
+    elif user_input.startswith("pick "):
+        user_input = user_input.replace("pick ", "take ", 1)
+    elif user_input.startswith("turn on ") or user_input.startswith("switch on "):
+        # drop the leading "turn"/"switch", leaving "on <thing>"
         user_input = " ".join(user_input.split()[1:])
 
     # http://www.quickforge.co.uk/catalog/view/theme/default/image/3D-XYZ-Graph.gif
@@ -90,13 +111,18 @@ def parse_user_input(user_input, player, world, stdscr):
     elif user_input in {"d", "down"}:
         new_location[2] -= 1
     else:
-        # otherwise assume this is a verb that the user can deal with
+        # otherwise treat the first word as a verb and dispatch it, but only
+        # if it's a known command — never call an arbitrary player attribute
         input_list = user_input.split()
-        try:
-            stdscr.addstr(getattr(player, input_list[0])(input_list[1:], room))
-        except AttributeError:
+        method_name = VERB_SYNONYMS.get(input_list[0])
+        if method_name is None:
             stdscr.addstr("I do not understand.\n")
-        except TypeError:
+            return room_described
+
+        handler = getattr(player, method_name)
+        try:
+            stdscr.addstr(handler(input_list[1:], room))
+        except (TypeError, IndexError):
             stdscr.addstr("I cannot do that.\n")
         except KeyError:
             stdscr.addstr("I cannot see that.\n")
